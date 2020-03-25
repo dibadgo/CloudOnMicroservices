@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+
+  db-mssqlserver:
+    image: mcr.microsoft.com/mssql/server:2017-CU19-ubuntu-16.04
+    restart: always
+    environment:
+        ACCEPT_EULA: Y
+        SA_PASSWORD: InCloudP@$$w0rd
+    ports:
+         - 1433:1433
+    volumes:
+        - /var/incloud/db-mssqlserver/data:/var/opt/mssql/data
+        - /var/incloud/db-mssqlserver/log:/var/opt/mssql/log
+        - /var/incloud/db-mssqlserver/secrets:/var/opt/mssql/secrets
+
+  identity-api:
+    build: ./Services/Identity/Identity.API
+    restart: always
+    links:
+        - db-mssqlserver:localdb
+    environment:
+        ASPNETCORE_URLS: http://localhost:5000;https://localhost:5001
+    ports:
+        - 6100:5000
+        - 6101:5001

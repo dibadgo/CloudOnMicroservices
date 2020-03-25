@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InCloud", "InCloud\InCloud.csproj", "{895EDDA3-33A5-4736-B089-D075DA4A0708}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateways", "ApiGateways", "{AE9591C8-ED2C-4392-ACF7-3D577EC6DF50}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Standart", "Standart", "{C996D78E-76E5-4226-9C25-8ECD3D87FB06}"
@@ -19,7 +17,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Disks.gRPC.Service", "Servi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{B83251BA-34A2-4C9C-BB53-5A4C372B50CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API", "Services\Identity\Identity.API\Identity.API.csproj", "{5CA70327-ACB0-4045-A001-6A7F9E75C934}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.API", "Services\Identity\Identity.API\Identity.API.csproj", "{5CA70327-ACB0-4045-A001-6A7F9E75C934}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{29ECD175-9D36-4DEA-A9FF-FC9BEC616914}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +30,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{895EDDA3-33A5-4736-B089-D075DA4A0708}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{895EDDA3-33A5-4736-B089-D075DA4A0708}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{895EDDA3-33A5-4736-B089-D075DA4A0708}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{895EDDA3-33A5-4736-B089-D075DA4A0708}.Release|Any CPU.Build.0 = Release|Any CPU
 		{09EA0857-1474-44F9-B32B-583D21E4E7CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{09EA0857-1474-44F9-B32B-583D21E4E7CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09EA0857-1474-44F9-B32B-583D21E4E7CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
