@@ -72,7 +72,7 @@ namespace Identity.API
             }
             else
             {
-                app.UseExceptionHandler("/Error");               
+                app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
 
@@ -92,21 +92,22 @@ namespace Identity.API
             });
         }
 
-        private static void ConfigureIdentityServer(IServiceCollection services)
+        /// <summary>
+        /// Configurating of the Identity Server 4
+        /// </summary>
+        /// <param name="services">Service collection</param>
+        private void ConfigureIdentityServer(IServiceCollection services)
         {
-            // Configure Identity Server
-            var cert = new X509Certificate2("D:\\Users\\Artyom\\Desktop\\microservices\\new_cert\\certificate.pfx", "lion");
-            
+            X509Certificate2 cert = Certificate.Certificate.Get();
+
             var builder = services.AddIdentityServer()
                 .AddSigningCredential(cert)
                 .AddInMemoryClients(Config.Clients)
-                //.AddInMemoryClients(Configuration.GetSection("Clients"))
                 .AddInMemoryIdentityResources(Config.Ids)
                 .AddInMemoryApiResources(Config.Apis);
 
             builder.Services.AddTransient<IResourceOwnerPasswordValidator, ResourceOwnerPasswordValidator>();
             builder.Services.AddTransient<IProfileService, ProfileService>();
         }
-
     }
 }

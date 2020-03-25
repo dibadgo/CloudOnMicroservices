@@ -12,45 +12,42 @@ namespace IdentityServer4WebApp.Configure
             public static IEnumerable<IdentityResource> Ids =>
                 new List<IdentityResource>
                 {
-                        new IdentityResources.OpenId(),
-                        new IdentityResources.Profile()
+                    new IdentityResources.OpenId(),
+                    new IdentityResources.Profile()
                 };
 
             public static IEnumerable<Scope> Scopes =>
                 new List<Scope> { 
                     new Scope {
-                        Name = "api1",
-                        DisplayName = "API 1",
-                        Description = "API 1 features and data"                    
+                        Name = "gateway",
+                        DisplayName = "API gateway",
+                        Description = "Standart gateway"                    
                     } 
                 };
        
             public static IEnumerable<ApiResource> Apis =>
                 new List<ApiResource>
                 {
-                new ApiResource("api1", "My API")
+                    new ApiResource("gateway", "Standart gateway")
                 };
 
             public static IEnumerable<Client> Clients =>
                 new List<Client>
                 {
-                new Client
-                {
-                    ClientId = "client",
-                    ClientName = "Resource owner Client",
-                    // no interactive user, use the clientid/secret for authentication
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    RequireClientSecret = false,
-
-                    // secret for authentication
-                    ClientSecrets =
+                    new Client
                     {
-                        new Secret("secret".Sha256())
-                    },
+                        ClientId = "client",
+                        ClientName = "Resource owner Client",
+
+                        AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+
+                        ClientSecrets =
+                        {
+                            new Secret("secret".Sha256())
+                        },
                     
-                    // scopes that client has access to
-                    AllowedScopes = { "api1" }
-                }   
+                        AllowedScopes = { "gateway" }
+                    }   
                 };
         }
-    }
+}

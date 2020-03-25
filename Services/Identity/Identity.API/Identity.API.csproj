@@ -20,4 +20,11 @@
     <Folder Include="Configure\" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <None Update="Certificate\localhost.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

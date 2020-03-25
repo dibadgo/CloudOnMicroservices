@@ -40,7 +40,7 @@ namespace StandartGateway
             {
                 options.Authority = identityUrl;
                 options.RequireHttpsMetadata = false;
-                options.Audience = "api1";
+                options.Audience = "gateway";
             });
                         
             services.AddControllers();            
