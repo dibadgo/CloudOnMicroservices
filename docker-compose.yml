@@ -3,11 +3,11 @@ version: '3.1'
 services:
 
   db-mssqlserver:
-    image: mcr.microsoft.com/mssql/server:2017-CU19-ubuntu-16.04
+    image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-16.04
     restart: always
     environment:
         ACCEPT_EULA: Y
-        SA_PASSWORD: InCloudP@$$w0rd
+        SA_PASSWORD: "InCloudP@66w0rd2z"
     ports:
          - 1433:1433
     volumes:
@@ -21,7 +21,7 @@ services:
     links:
         - db-mssqlserver:localdb
     environment:
-        ASPNETCORE_URLS: http://localhost:5000;https://localhost:5001
+        ASPNETCORE_URLS: http://*:5000;https://*:5001
     ports:
         - 6100:5000
         - 6101:5001

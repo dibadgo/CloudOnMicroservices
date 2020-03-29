@@ -16,6 +16,7 @@ using System.Security.Cryptography.X509Certificates;
 using IdentityServer4WebApp.Configure;
 using IdentityServer4.Validation;
 using IdentityServer4.Services;
+using Microsoft.Data.SqlClient;
 
 namespace Identity.API
 {
@@ -30,9 +31,16 @@ namespace Identity.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            //var builder = new SqlConnectionStringBuilder(
+            //Configuration.GetConnectionString("DefaultConnection"));
+            //builder.UserID = Configuration.Get<string>("IdentityDbUser");//"SA";
+            //builder.Password = "InCloudP@66w0rd2z";
+            //string _connection = builder.ConnectionString;
+
+            string connectionString = Configuration.GetConnectionString("IdentityDbContext");
+
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(connectionString));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 

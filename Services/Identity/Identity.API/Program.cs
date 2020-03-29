@@ -18,10 +18,14 @@ namespace Identity.API
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)                
+            Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddEnvironmentVariables(prefix: "InCloud_");
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder
+                    webBuilder                       
                         .ConfigureKestrel(serverOptions =>
                         {
                             serverOptions.AllowSynchronousIO = true;
