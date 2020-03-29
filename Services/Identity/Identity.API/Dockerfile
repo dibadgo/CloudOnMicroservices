@@ -13,7 +13,6 @@ COPY . .
 RUN pwd
 RUN ls
 RUN dotnet build "./Identity.API.csproj" -c Release -o /app/build
-RUN dotnet ef database update
 
 FROM build AS publish
 RUN dotnet publish "./Identity.API.csproj" -c Release -o /app/publish

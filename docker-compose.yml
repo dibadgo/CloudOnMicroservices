@@ -2,22 +2,44 @@ version: '3.1'
 
 services:
 
+# Proxy ------------------------------------------------------
+
+  envoy:
+    build: ./EnvoyProxy/
+    restart: always
+    networks:
+       - incloudnetwork
+  
+# Databases ------------------------------------------------------
+
   db-mssqlserver:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-16.04
     restart: always
     environment:
         ACCEPT_EULA: Y
         SA_PASSWORD: "InCloudP@66w0rd2z"
-    ports:
-         - 1433:1433
+    expose:
+        - 1433:1433
     volumes:
         - /var/incloud/db-mssqlserver/data:/var/opt/mssql/data
         - /var/incloud/db-mssqlserver/log:/var/opt/mssql/log
         - /var/incloud/db-mssqlserver/secrets:/var/opt/mssql/secrets
+    networks:
+        - incloudnetwork
+
+# Services ------------------------------------------------------
+
+  std_gateway:
+    build: ./APIGateways/Standarrt/StandartGateway
+    restart: always
+    networks:
+      - incloudnetwork
 
   identity-api:
     build: ./Services/Identity/Identity.API
     restart: always
+    depends_on:
+        - db-mssqlserver
     links:
         - db-mssqlserver:localdb
     environment:
@@ -25,3 +47,10 @@ services:
     ports:
         - 6100:5000
         - 6101:5001
+    networks:
+        - incloudnetwork
+
+
+networks:
+   incloudnetwork:
+       driver: bridge
