@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandartGateway", "ApiGatew
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{903F8910-7147-463C-9D79-6A7A0BB7E641}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Disks", "Disks", "{5E4B2705-C2A0-4126-8949-B869E14DE71C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Volumes", "Volumes", "{5E4B2705-C2A0-4126-8949-B869E14DE71C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Disks.gRPC.Service", "Services\Disks\Disks.gRPC.Service\Disks.gRPC.Service.csproj", "{24981D22-ABF5-4F05-865E-27842A73E704}"
 EndProject
