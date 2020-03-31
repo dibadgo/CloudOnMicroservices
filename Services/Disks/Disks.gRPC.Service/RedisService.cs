@@ -14,11 +14,11 @@ namespace Disks.gRPC.Service
         private readonly int _redisPort;
         private readonly Logger<RedisService> logger;
 
-        public RedisService(IConfiguration config, Logger<RedisService> logger)
+        public RedisService(IConfiguration config)
         {
             _redisHost = config["Redis:Host"];
             _redisPort = Convert.ToInt32(config["Redis:Port"]);
-            this.logger = logger;
+           // this.logger = logger;
         }
 
         public ConnectionMultiplexer Connect()
@@ -30,7 +30,7 @@ namespace Disks.gRPC.Service
             }
             catch (RedisConnectionException err)
             {
-                logger.LogError(err.ToString());
+                //logger.LogError(err.ToString());
                 throw err;
             }
         }

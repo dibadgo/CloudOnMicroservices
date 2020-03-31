@@ -15,13 +15,14 @@ message CreateVolumeRequest {
   string name = 1;
   int32 sizeGb = 2;
   string osType = 3;
+  repeated string mountPints = 4;
 }
 
 message VolumeReply {
   string id = 1;
   string name = 2;
   int32 sizeGb = 3;
-  string osType = 4;
+  repeated string mountPoints = 4;
 }
 
 message GetVolume {

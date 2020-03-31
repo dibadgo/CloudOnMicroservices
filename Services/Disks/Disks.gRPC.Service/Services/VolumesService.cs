@@ -16,9 +16,9 @@ namespace Disks.gRPC.Service.Services
             this.volumeDataSource = volumeDataSource;
         }
 
-        public override Task<VolumeReply> Create(CreateVolumeRequest request, ServerCallContext context)
+        public override async Task<VolumeReply> Create(CreateVolumeRequest request, ServerCallContext context)
         {
-            return base.Create(request, context);
+            return await volumeDataSource.Create(request);
         }
 
         public override Task<VolumeReply> Get(GetVolume request, ServerCallContext context)
