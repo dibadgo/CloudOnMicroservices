@@ -1,5 +1,6 @@
 ﻿using Disks.gRPC.Service.Repos;
 using Grpc.Core;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,24 +12,46 @@ namespace Disks.gRPC.Service.Services
     {
         private readonly IVolumeDataSource volumeDataSource;
 
-        public VolumesService(IVolumeDataSource volumeDataSource)
+        private readonly ILogger<VolumesService> logger;
+
+        public VolumesService(IVolumeDataSource volumeDataSource, ILogger<VolumesService> logger)
         {
             this.volumeDataSource = volumeDataSource;
+            this.logger = logger;
         }
 
         public override async Task<VolumeReply> Create(CreateVolumeRequest request, ServerCallContext context)
         {
-            return await volumeDataSource.Create(request);
+            try
+            {
+                return await volumeDataSource.Create(request);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Redis service error");
+                throw new Exception("Something went wrong");
+            }
         }
 
-        public override Task<VolumeReply> Get(GetVolume request, ServerCallContext context)
+        public override async Task<VolumeReply> Get(GetVolume request, ServerCallContext context)
         {
-            return base.Get(request, context);
+            try
+            {
+                return await volumeDataSource.Get(request.Id);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Redis service error");
+                throw new Exception("Something went wrong");
+            }           
         }
 
-        public override Task<VolumeReply> List(CreateVolumeRequest request, ServerCallContext context)
+        public override async Task List(CreateVolumeRequest request, IServerStreamWriter<VolumeReply> responseStream, ServerCallContext context)
         {
-            return base.List(request, context);
+            IEnumerable<VolumeReply> list = await volumeDataSource.List();
+            
+            foreach (VolumeReply reply in list)
+                await responseStream.WriteAsync(reply);
         }
     }
 }

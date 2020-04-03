@@ -7,12 +7,14 @@ namespace Disks.gRPC.Service.Data
 {
     public static class VolumeAdapter
     {
+        private const string SEPARATOR = "_";
+
         public static VolumeModel Volume(string id, CreateVolumeRequest createVolumeRequest)
         {
             return new VolumeModel(
                 id,
                 createVolumeRequest.SizeGb,
-                createVolumeRequest.MountPints.ToArray(),
+                string.Join(SEPARATOR, createVolumeRequest.MountPints),
                 createVolumeRequest.Name
             );
         }
@@ -25,7 +27,7 @@ namespace Disks.gRPC.Service.Data
                 Name = volumeModel.Name,
                 SizeGb = volumeModel.Size
             };
-            reply.MountPoints.AddRange(volumeModel.MountPoints);
+            reply.MountPoints.AddRange(volumeModel.MountPoints.Split(SEPARATOR));
 
             return reply;
         }

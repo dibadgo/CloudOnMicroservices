@@ -18,7 +18,6 @@ namespace Disks.gRPC.Service
         {
             _redisHost = config["Redis:Host"];
             _redisPort = Convert.ToInt32(config["Redis:Port"]);
-           // this.logger = logger;
         }
 
         public ConnectionMultiplexer Connect()
