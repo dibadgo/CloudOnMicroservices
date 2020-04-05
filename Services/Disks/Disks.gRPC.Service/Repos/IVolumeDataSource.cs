@@ -8,10 +8,10 @@ namespace Disks.gRPC.Service.Repos
 {
     public interface IVolumeDataSource
     {
-        Task<VolumeReply> Create(CreateVolumeRequest createVolumeRequest);
+        Task<VolumeReply> Create(CreateVolumeRequest createVolumeRequest, string userId);
 
-        Task<VolumeReply> Get(string key);
+        Task<VolumeReply> Get(string key, string userId);
 
-        Task<IEnumerable<VolumeReply>> List();
+        Task<IEnumerable<VolumeReply>> List(string userId);
     }
 }

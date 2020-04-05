@@ -7,7 +7,7 @@ package volume;
 service Volume {
 
   rpc Create (CreateVolumeRequest) returns (VolumeReply);
-  rpc List (CreateVolumeRequest) returns (stream VolumeReply);
+  rpc List (Empty) returns (stream VolumeReply);
   rpc Get (GetVolume) returns (VolumeReply);
  }
 
@@ -28,4 +28,8 @@ message VolumeReply {
 
 message GetVolume {
     string id = 1;
+}
+
+message Empty {
+
 }

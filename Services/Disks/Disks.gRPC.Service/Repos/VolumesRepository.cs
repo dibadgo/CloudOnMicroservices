@@ -4,12 +4,16 @@ using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Disks.gRPC.Service.Repos
 {
+    /// <summary>
+    /// Volumes repo
+    /// </summary>
     public class VolumesRepository : IVolumeDataSource
     {
         /// <summary>
@@ -34,9 +38,10 @@ namespace Disks.gRPC.Service.Repos
         /// Create a volume
         /// </summary>
         /// <param name="createVolumeRequest">Parameters for create</param>
+        /// <param name="userId">User id</param>
         /// <exception cref="VolumeException">If cannot create a volume</exception>
         /// <returns>gRPC reply with volume id</returns>
-        public async Task<VolumeReply> Create(CreateVolumeRequest createVolumeRequest)
+        public async Task<VolumeReply> Create(CreateVolumeRequest createVolumeRequest, string userId)
         {
             logger.LogInformation("Requested for creaton of a volume"); // english 
 
@@ -53,9 +58,10 @@ namespace Disks.gRPC.Service.Repos
             ITransaction transaction = db.CreateTransaction();
             logger.LogInformation($"Bigin transaction");
 
+            string redisKey = GetVolumeKey(userId, volumeId);
             foreach (PropertyInfo propInfo in volume.GetType().GetProperties())
             {
-                _ = transaction.HashSetAsync(volumeId, propInfo.Name, propInfo.GetValue(volume).ToString());               
+                _ = transaction.HashSetAsync(redisKey, propInfo.Name, propInfo.GetValue(volume).ToString());               
             }
 
             if (await transaction.ExecuteAsync() == false)
@@ -70,28 +76,30 @@ namespace Disks.gRPC.Service.Repos
         /// <summary>
         /// Gets volume by id
         /// </summary>
-        /// <param name="key">Volume id (vol-xxxxxxxxx)</param>
+        /// <param name="volumeId">Volume id (vol-xxxxxxxxx)</param>
+        /// <param name="userId">User id</param>
         /// <returns></returns>
-        public async Task<VolumeReply> Get(string key)
+        public async Task<VolumeReply> Get(string volumeId, string userId)
         {
-            logger.LogInformation($"Searching the volume with id {key}");
+            logger.LogInformation($"Searching the volume with id {volumeId}");
             logger.LogDebug($"Try to connect to the Redis");
             using ConnectionMultiplexer redis = redisService.Connect();
             var db = redis.GetDatabase();
             logger.LogDebug($"Connected to the Redis");
 
-            if (db.KeyExists(key) == false)
+            string redisKey = GetVolumeKey(userId, volumeId);
+            if (db.KeyExists(redisKey) == false)
             {
-                logger.LogError($"Cannot find a volume with id {key}");
-                throw new VolumeException($"Cannot find a volume with id {key}");
+                logger.LogError($"Cannot find a volume with id {redisKey}");
+                throw new VolumeException($"Cannot find a volume with id {redisKey}");
             }
-            logger.LogInformation($"The volume with id {key} is exists in the store. " +
+            logger.LogInformation($"The volume with id {redisKey} is exists in the store. " +
                 $"Reqding the values..");
 
             VolumeModel volumeModel = new VolumeModel();
             foreach (PropertyInfo property in volumeModel.GetType().GetProperties())
             {
-                var value = await db.HashGetAsync(key, property.Name);
+                var value = await db.HashGetAsync(redisKey, property.Name);
                 property.SetValue(volumeModel, Convert.ChangeType(value, property.PropertyType));
             }
 
@@ -99,16 +107,45 @@ namespace Disks.gRPC.Service.Repos
             return VolumeAdapter.Volume(volumeModel);
         }
 
-        public async Task<IEnumerable<VolumeReply>> List()
+        /// <summary>
+        /// List of volumes by user Id
+        /// </summary>
+        /// <param name="userId">Use Id</param>
+        /// <returns></returns>
+        public async Task<IEnumerable<VolumeReply>> List(string userId)
         {
-            return await Task.FromResult(new List<VolumeReply>() { new VolumeReply() }); // TODO
+            using ConnectionMultiplexer redis = redisService.Connect();
+            var db = redis.GetDatabase();
+
+            logger.LogDebug("Connected to Redis");
+
+            string redisKey = GetVolumeKey(userId);
+            logger.LogDebug($"Searching by key pattern: {redisKey}");
+
+            EndPoint endPoint = redis.GetEndPoints().First() ?? throw new VolumeException($"Cannot find an endpoint");
+            RedisKey[] keys = redis.GetServer(endPoint).Keys(pattern: redisKey).ToArray();
+            logger.LogDebug($"Found {keys.Length} keys");
             
-            //using ConnectionMultiplexer redis = redisService.Connect();
-            //var db = redis.GetDatabase();
+            List<VolumeModel> volumes = new List<VolumeModel>();
+            foreach (RedisKey key in keys)
+            {
+                logger.LogDebug($"Reading the key {key}");
+                VolumeModel volumeModel = new VolumeModel();
+                foreach (PropertyInfo property in volumeModel.GetType().GetProperties())
+                {
+                    var value = await db.HashGetAsync(key, property.Name);
+                    property.SetValue(volumeModel, Convert.ChangeType(value, property.PropertyType));
+                }
+                volumes.Add(volumeModel);
+            }
 
-            //db.HashGetAll
+            logger.LogDebug($"All volumes ejected successfully");
+            return volumes.ConvertAll(v => VolumeAdapter.Volume(v));
+        }
 
-
+        private static string GetVolumeKey(string userId, string volumeId = "*")
+        {
+            return $"{userId}:{volumeId}";
         }
     }
 }

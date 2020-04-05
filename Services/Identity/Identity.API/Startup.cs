@@ -110,6 +110,7 @@ namespace Identity.API
 
             var builder = services.AddIdentityServer()
                 .AddSigningCredential(cert)
+                //.AddDeveloperSigningCredential()
                 .AddInMemoryClients(Config.Clients)
                 .AddInMemoryIdentityResources(Config.Ids)
                 .AddInMemoryApiResources(Config.Apis);

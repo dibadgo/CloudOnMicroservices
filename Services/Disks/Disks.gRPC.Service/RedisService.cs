@@ -12,12 +12,14 @@ namespace Disks.gRPC.Service
     {
         private readonly string _redisHost;
         private readonly int _redisPort;
-        private readonly Logger<RedisService> logger;
+        private readonly ILogger<RedisService> logger;
 
-        public RedisService(IConfiguration config)
+        public RedisService(IConfiguration config, ILogger<RedisService> logger)
         {
             _redisHost = config["Redis:Host"];
             _redisPort = Convert.ToInt32(config["Redis:Port"]);
+
+            this.logger = logger;
         }
 
         public ConnectionMultiplexer Connect()
@@ -25,6 +27,7 @@ namespace Disks.gRPC.Service
             try
             {
                 var configString = $"{_redisHost}:{_redisPort},connectRetry=5";
+                logger.LogInformation($"Redis Host {configString}");
                 return ConnectionMultiplexer.Connect(configString);
             }
             catch (RedisConnectionException err)

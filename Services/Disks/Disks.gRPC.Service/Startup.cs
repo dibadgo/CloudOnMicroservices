@@ -1,25 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using Disks.gRPC.Service.Repos;
 using Disks.gRPC.Service.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using StackExchange.Redis;
 
 namespace Disks.gRPC.Service
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+               
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureAuthService(services);
+
             services.AddGrpc();
             services.AddSingleton<RedisService>();
             services.AddScoped<IVolumeDataSource, VolumesRepository>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IIdentityService, IdentityService>();           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -29,8 +45,13 @@ namespace Disks.gRPC.Service
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -45,5 +66,26 @@ namespace Disks.gRPC.Service
                 });
             });
         }
+
+        private void ConfigureAuthService(IServiceCollection services)
+        {
+            var identityUrl = Configuration.GetValue<string>("urls:identity"); // Get the Identity
+
+            IdentityModelEventSource.ShowPII = true;
+
+            services.AddAuthorization();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = identityUrl;
+                options.RequireHttpsMetadata = false;
+                options.Audience = "volumes";
+            });
+        }
+
     }
 }

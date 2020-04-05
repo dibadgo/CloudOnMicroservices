@@ -22,13 +22,20 @@ namespace IdentityServer4WebApp.Configure
                         Name = "gateway",
                         DisplayName = "API gateway",
                         Description = "Standart gateway"                    
-                    } 
+                    },
+                    new Scope
+                    {
+                        Name = "volumes",
+                        DisplayName = "API gateway",
+                        Description = "Standart gateway"
+                    }
                 };
        
             public static IEnumerable<ApiResource> Apis =>
                 new List<ApiResource>
                 {
-                    new ApiResource("gateway", "Standart gateway")
+                    new ApiResource("gateway", "Standart gateway"),
+                    new ApiResource("volumes", "Volumes API")
                 };
 
             public static IEnumerable<Client> Clients =>
@@ -46,7 +53,7 @@ namespace IdentityServer4WebApp.Configure
                             new Secret("secret".Sha256())
                         },
                     
-                        AllowedScopes = { "gateway" }
+                        AllowedScopes = { "gateway", "volumes" }
                     }   
                 };
         }
