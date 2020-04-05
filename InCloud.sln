@@ -30,6 +30,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EnvoyProxy", "EnvoyProxy", 
 		envoy.yml = envoy.yml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Instances", "Instances", "{8674E54D-0833-4926-BDF3-83001BB885B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Instances.API", "Services\Instances\Instances.API\Instances.API.csproj", "{C875589E-0715-46EB-9EF6-AC25FD32E19A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +52,10 @@ Global
 		{5CA70327-ACB0-4045-A001-6A7F9E75C934}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CA70327-ACB0-4045-A001-6A7F9E75C934}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CA70327-ACB0-4045-A001-6A7F9E75C934}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C875589E-0715-46EB-9EF6-AC25FD32E19A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C875589E-0715-46EB-9EF6-AC25FD32E19A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C875589E-0715-46EB-9EF6-AC25FD32E19A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C875589E-0715-46EB-9EF6-AC25FD32E19A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +67,8 @@ Global
 		{24981D22-ABF5-4F05-865E-27842A73E704} = {5E4B2705-C2A0-4126-8949-B869E14DE71C}
 		{B83251BA-34A2-4C9C-BB53-5A4C372B50CE} = {903F8910-7147-463C-9D79-6A7A0BB7E641}
 		{5CA70327-ACB0-4045-A001-6A7F9E75C934} = {B83251BA-34A2-4C9C-BB53-5A4C372B50CE}
+		{8674E54D-0833-4926-BDF3-83001BB885B7} = {903F8910-7147-463C-9D79-6A7A0BB7E641}
+		{C875589E-0715-46EB-9EF6-AC25FD32E19A} = {8674E54D-0833-4926-BDF3-83001BB885B7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {34E17021-57AE-4392-856B-FB45EEC78BAF}
