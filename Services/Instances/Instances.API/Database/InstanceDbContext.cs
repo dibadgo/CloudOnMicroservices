@@ -13,8 +13,8 @@ namespace Instances.API.Database
         {
         }
 
-        DbSet<Instance> Instances { get; set; }
+        public DbSet<Instance> Instances { get; set; }
 
-        DbSet<Volume> Volumes { get; set; }
+        public DbSet<Volume> Volumes { get; set; }
     }
 }

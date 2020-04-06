@@ -1,4 +1,5 @@
-﻿using Disks.gRPC.Service.Data;
+﻿using CommonLib;
+using Disks.gRPC.Service.Data;
 using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 using System;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace Disks.gRPC.Service.Repos
 {
     /// <summary>
-    /// Volumes repo
+    /// This is a place for volume managment e.g. saveing to DB and searching 
     /// </summary>
     public class VolumesRepository : IVolumeDataSource
     {
@@ -21,6 +22,9 @@ namespace Disks.gRPC.Service.Repos
         /// </summary>
         private readonly RedisService redisService;
 
+        /// <summary>
+        /// Custom logger
+        /// </summary>
         private readonly ILogger<VolumesRepository> logger;
 
         /// <summary>
@@ -45,7 +49,7 @@ namespace Disks.gRPC.Service.Repos
         {
             logger.LogInformation("Requested for creaton of a volume"); // english 
 
-            string volumeId = EntityIdGenerator.Create();
+            string volumeId = IdentityFabric.GenVolumeId();
             VolumeModel volume = VolumeAdapter.Volume(volumeId, createVolumeRequest);
 
             logger.LogInformation($"Created the VolumeModel with Id {volumeId}");
@@ -66,7 +70,7 @@ namespace Disks.gRPC.Service.Repos
 
             if (await transaction.ExecuteAsync() == false)
             {
-                logger.LogError("Cannto create a volume. Transaction failed");
+                logger.LogError("Cannot create a volume. Transaction failed");
                 throw new VolumeException("Cannot create a volume");
             }
             logger.LogInformation($"Creansaction completed successfully");

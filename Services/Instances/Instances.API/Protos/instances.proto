@@ -4,18 +4,40 @@ option csharp_namespace = "Instances.API";
 
 package instances;
 
-// The greeting service definition.
 service Instances {
-  // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply);
+  rpc Launch (LaunchInstanceRequest) returns (InstanceGrpc);
 }
 
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
+message LaunchInstanceRequest {
+  string name = 1;  
+  string instanceType = 2;
+  VolumeGrpc systemVolume = 3;
+  repeated VolumeGrpc dataVolumes = 4;
 }
 
-// The response message containing the greetings.
-message HelloReply {
-  string message = 1;
+message VolumeGrpc {
+  string id = 1;
+  string name = 2;
+}
+
+message InstanceGrpc {
+  string id = 1;
+  string name = 2;
+  VolumeGrpc systemVolume = 3;
+  string instanceType = 4;
+  InstanceStateGrpc state = 5;
+  repeated VolumeGrpc dataVolumes = 6;
+}
+
+enum InstanceStateGrpc {
+     STOPPED     = 0;
+     STOPPING    = 1;
+
+     STARTED     = 2;
+     STARTING    = 3; 
+
+     TERMINATE   = 4;
+     TERMINATING = 5;
+
+     PENDING     = 6;
 }

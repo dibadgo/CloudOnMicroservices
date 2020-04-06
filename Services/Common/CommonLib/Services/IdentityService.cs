@@ -5,7 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Disks.gRPC.Service.Services
+namespace CommonLib.Services
 {
     /// <summary>
     /// Wrapper on Http context to obtains user's info
