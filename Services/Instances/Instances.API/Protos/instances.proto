@@ -6,6 +6,9 @@ package instances;
 
 service Instances {
   rpc Launch (LaunchInstanceRequest) returns (InstanceGrpc);
+  rpc Start (InstanceId) returns (InstanceGrpc);
+  rpc Stop (InstanceId) returns (InstanceGrpc);
+  rpc Terminate (InstanceId) returns (InstanceGrpc);
 }
 
 message LaunchInstanceRequest {
@@ -13,6 +16,10 @@ message LaunchInstanceRequest {
   string instanceType = 2;
   VolumeGrpc systemVolume = 3;
   repeated VolumeGrpc dataVolumes = 4;
+}
+
+message InstanceId {
+  string id = 1;
 }
 
 message VolumeGrpc {
