@@ -4,6 +4,107 @@
         <name>StandartGateway</name>
     </assembly>
     <members>
+        <member name="T:StandartGateway.VolumeConfigurationBindModel">
+            <summary>
+            Configuration for creating the volume
+            </summary>
+        </member>
+        <member name="P:StandartGateway.VolumeConfigurationBindModel.Name">
+            <summary>
+            The volume name
+            </summary>
+        </member>
+        <member name="P:StandartGateway.VolumeConfigurationBindModel.SizeGb">
+            <summary>
+            The size of the volume
+            </summary>
+        </member>
+        <member name="P:StandartGateway.VolumeConfigurationBindModel.OsType">
+            <summary>
+            The Os type on the volume
+            </summary>
+        </member>
+        <member name="P:StandartGateway.VolumeConfigurationBindModel.MountPints">
+            <summary>
+            All mount points on the disk
+            </summary>
+        </member>
+        <member name="T:StandartGateway.Controllers.VolumesController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:StandartGateway.Controllers.VolumesController.logger">
+            <summary>
+            Custom logger
+            </summary>
+        </member>
+        <member name="F:StandartGateway.Controllers.VolumesController.volumeSevice">
+            <summary>
+            Volume services
+            </summary>
+        </member>
+        <member name="M:StandartGateway.Controllers.VolumesController.#ctor(Microsoft.Extensions.Logging.ILogger{StandartGateway.Controllers.VolumesController},StandartGateway.Services.IVolumeSevice)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="logger">Custom logger</param>
+            <param name="volumeSevice">Volume service</param>
+        </member>
+        <member name="M:StandartGateway.Controllers.VolumesController.Get(System.String)">
+            <summary>
+            Searchi a volume by Id
+            </summary>
+            <param name="volumeId">Volume id (vol-xxxxxxx)</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Controllers.VolumesController.List">
+            <summary>
+            Obtain the awailable list of volumes for currents user
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Controllers.VolumesController.Create(StandartGateway.VolumeConfigurationBindModel)">
+            <summary>
+            Create a volume by provided configuration
+            </summary>
+            <param name="configuration">The configuration for a new volume</param>
+            <returns></returns>
+        </member>
+        <member name="T:StandartGateway.Services.VolumeService">
+            <summary>
+            Volume service
+            </summary>
+        </member>
+        <member name="M:StandartGateway.Services.VolumeService.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Logging.ILogger{StandartGateway.Services.VolumeService},Microsoft.Extensions.Options.IOptions{StandartGateway.Other.UrlsConfig},StandartGateway.Services.GrpcCallerService)">
+            <summary>
+            Constructors
+            </summary>
+            <param name="httpClient"></param>
+            <param name="logger"></param>
+            <param name="config"></param>
+            <param name="grpcCallerService"></param>
+        </member>
+        <member name="M:StandartGateway.Services.VolumeService.GetVolume(System.String)">
+            <summary>
+            Obtains the volume by Id
+            </summary>
+            <param name="volumeId">Volume id</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.VolumeService.CreateVolume(StandartGateway.VolumeConfigurationBindModel)">
+            <summary>
+            Create a volume from the bind model
+            </summary>
+            <param name="bindModel">Bind volume with volume's properties</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.VolumeService.Volumes">
+            <summary>
+            Obtain all volumes for user 
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Disks.gRPC.Service.VolumesReflection">
             <summary>Holder for reflection information generated from volumes.proto</summary>
         </member>

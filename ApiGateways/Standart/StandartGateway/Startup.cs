@@ -59,7 +59,7 @@ namespace StandartGateway
             app.UseSwagger()
                 .UseSwaggerUI(setup =>
                 {
-                    setup.SwaggerEndpoint("/swagger/v1/swagger.json", "SearchMicroservice.API V1");
+                    setup.SwaggerEndpoint("/swagger/v1/swagger.json", "StandartGateway V1");
                 });
 
             app.UseEndpoints(endpoints =>

@@ -8,6 +8,10 @@ namespace StandartGateway.Services
 {
     public interface IVolumeSevice
     {
-        Task<VolumeReply> CreateVolume();
+        Task<VolumeReply> GetVolume(string volumeId);
+
+        Task<VolumeReply> CreateVolume(VolumeConfigurationBindModel bindModel);
+
+        Task<List<VolumeReply>> Volumes();
     }
 }
