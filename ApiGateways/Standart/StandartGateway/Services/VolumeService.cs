@@ -15,7 +15,7 @@ namespace StandartGateway.Services
     /// <summary>
     /// Volume service
     /// </summary>
-    public class VolumeService : IVolumeSevice
+    public class VolumeService : IVolumeDataSource
     {
         private readonly HttpClient httpClient;
         private readonly UrlsConfig urls;

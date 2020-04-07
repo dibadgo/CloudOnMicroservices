@@ -8,9 +8,5 @@ namespace Instances.API.Models
     public class Volume
     {
         public string Id { get; set; }
-        
-        public string Name { get; set; }
-
-        public string MountPoints { get; set; }
     }
 }

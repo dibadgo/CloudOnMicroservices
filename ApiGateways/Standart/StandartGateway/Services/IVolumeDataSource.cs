@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StandartGateway.Services
 {
-    public interface IVolumeSevice
+    public interface IVolumeDataSource
     {
         Task<VolumeReply> GetVolume(string volumeId);
 

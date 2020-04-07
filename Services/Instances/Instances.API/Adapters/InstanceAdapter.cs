@@ -8,17 +8,7 @@ using System.Threading.Tasks;
 namespace Instances.API.Adapters
 {
     public class InstanceAdapter : IAdapter<Instance, InstanceGrpc>, IAdapter<LaunchInstanceRequest, Instance>
-    {
-        private readonly IAdapter<Volume, VolumeGrpc> VolumeAdapter;
-
-        private readonly IAdapter<VolumeGrpc, Volume> VolumeAdapterGrpc;
-
-        public InstanceAdapter(IAdapter<Volume, VolumeGrpc> volumeAdapter, IAdapter<VolumeGrpc, Volume> volumeAdapterGrpc)
-        {           
-            VolumeAdapter = volumeAdapter;
-            VolumeAdapterGrpc = volumeAdapterGrpc;
-        }
-
+    {    
         public InstanceGrpc Transform(Instance model)
         {
             InstanceGrpc instanceGrpc = new InstanceGrpc()
@@ -26,13 +16,11 @@ namespace Instances.API.Adapters
                 Id = model.Id,
                 Name = model.Name,
                 InstanceType = model.InstanceType,
-                SystemVolume = VolumeAdapter.Transform(model.SystemVolume),
+                SystemVolume = model.SystemVolume.Id,
                 State = InstanceStateFrom(model.InstanceState)
             };
 
-            var dataVolumes = model.DataVolumes
-                .ConvertAll(v => VolumeAdapter.Transform(v));
-            instanceGrpc.DataVolumes.Add(dataVolumes);
+            instanceGrpc.DataVolumes.AddRange(model.DataVolumes.ConvertAll(v => v.Id));
 
             return instanceGrpc;
         }
@@ -41,13 +29,13 @@ namespace Instances.API.Adapters
         {
             List<Volume> dataVolumes = request.DataVolumes
                .ToList()
-               .ConvertAll(v => VolumeAdapterGrpc.Transform(v));
+               .ConvertAll(id => new Volume() { Id = id});
 
             return new Instance()
             {
                 Id = IdentityFabric.GenInstanceId(),
                 Name = request.Name,                
-                SystemVolume = VolumeAdapterGrpc.Transform(request.SystemVolume),
+                SystemVolume = new Volume() { Id = request.SystemVolume },
                 DataVolumes = dataVolumes,
                 InstanceType = request.InstanceType,
                 InstanceState = InstanceState.PENDING

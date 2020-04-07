@@ -27,13 +27,13 @@ namespace StandartGateway.Controllers
         /// <summary>
         /// Volume services
         /// </summary>
-        private readonly IVolumeSevice volumeSevice;
+        private readonly IVolumeDataSource volumeSevice;
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="logger">Custom logger</param>
         /// <param name="volumeSevice">Volume service</param>
-        public VolumesController(ILogger<VolumesController> logger, IVolumeSevice volumeSevice)
+        public VolumesController(ILogger<VolumesController> logger, IVolumeDataSource volumeSevice)
         {
             this.logger = logger;
             this.volumeSevice = volumeSevice;

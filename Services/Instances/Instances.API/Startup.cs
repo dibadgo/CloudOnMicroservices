@@ -39,9 +39,6 @@ namespace Instances.API
 
             services.AddScoped<IInstanceDataSource, InstancesRepository>();
 
-            services.AddScoped<IAdapter<VolumeGrpc, Volume>, VolumeAdapter>();
-            services.AddScoped<IAdapter<Volume, VolumeGrpc>, VolumeAdapter>();
-
             services.AddScoped<IAdapter<Instance, InstanceGrpc>, InstanceAdapter>();
             services.AddScoped<IAdapter<LaunchInstanceRequest, Instance>, InstanceAdapter>();
             

@@ -126,7 +126,7 @@ namespace StandartGateway
                .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
 
             services
-                .AddHttpClient<IVolumeSevice, VolumeService>()
+                .AddHttpClient<IVolumeDataSource, VolumeService>()
                 .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
             
             return services;

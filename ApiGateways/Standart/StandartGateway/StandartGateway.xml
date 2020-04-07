@@ -29,6 +29,36 @@
             All mount points on the disk
             </summary>
         </member>
+        <member name="T:StandartGateway.BindModels.LaunchInstanceConfiguration">
+            <summary>
+            The configuration for a new instance
+            </summary>
+        </member>
+        <member name="P:StandartGateway.BindModels.LaunchInstanceConfiguration.Name">
+            <summary>
+            Instance name
+            </summary>
+        </member>
+        <member name="P:StandartGateway.BindModels.LaunchInstanceConfiguration.InstanceType">
+            <summary>
+            Instance type
+            </summary>
+        </member>
+        <member name="P:StandartGateway.BindModels.LaunchInstanceConfiguration.SystemVolumeId">
+            <summary>
+            System volume
+            </summary>
+        </member>
+        <member name="P:StandartGateway.BindModels.LaunchInstanceConfiguration.DataVolumeIds">
+            <summary>
+            List of data volumes
+            </summary>        
+        </member>
+        <member name="M:StandartGateway.BindModels.LaunchInstanceConfiguration.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
         <member name="T:StandartGateway.Controllers.VolumesController">
             <summary>
             
@@ -69,6 +99,43 @@
             Create a volume by provided configuration
             </summary>
             <param name="configuration">The configuration for a new volume</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.InstancesService.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Logging.ILogger{StandartGateway.Services.InstancesService},Microsoft.Extensions.Options.IOptions{StandartGateway.Other.UrlsConfig},StandartGateway.Services.GrpcCallerService)">
+            <summary>
+            Constructors
+            </summary>
+            <param name="httpClient"></param>
+            <param name="logger"></param>
+            <param name="config"></param>
+            <param name="grpcCallerService"></param>
+        </member>
+        <member name="M:StandartGateway.Services.InstancesService.Launch(StandartGateway.BindModels.LaunchInstanceConfiguration)">
+            <summary>
+            Launch a new instance by the provided confiduration
+            </summary>
+            <param name="configuration">Configurations</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.InstancesService.Start(System.String)">
+            <summary>
+            Start the instance
+            </summary>
+            <param name="instanceId">The instance id</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.InstancesService.Stop(System.String)">
+            <summary>
+            Stop the instance
+            </summary>
+            <param name="instanceId">The instance id</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.InstancesService.Terminate(System.String)">
+            <summary>
+            Terminate the instance
+            </summary>
+            <param name="instanceId">Instance id</param>
             <returns></returns>
         </member>
         <member name="T:StandartGateway.Services.VolumeService">
@@ -182,12 +249,6 @@
         </member>
         <member name="F:Instances.API.InstanceId.IdFieldNumber">
             <summary>Field number for the "id" field.</summary>
-        </member>
-        <member name="F:Instances.API.VolumeGrpc.IdFieldNumber">
-            <summary>Field number for the "id" field.</summary>
-        </member>
-        <member name="F:Instances.API.VolumeGrpc.NameFieldNumber">
-            <summary>Field number for the "name" field.</summary>
         </member>
         <member name="F:Instances.API.InstanceGrpc.IdFieldNumber">
             <summary>Field number for the "id" field.</summary>

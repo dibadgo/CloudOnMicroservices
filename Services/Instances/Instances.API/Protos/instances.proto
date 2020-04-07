@@ -14,26 +14,21 @@ service Instances {
 message LaunchInstanceRequest {
   string name = 1;  
   string instanceType = 2;
-  VolumeGrpc systemVolume = 3;
-  repeated VolumeGrpc dataVolumes = 4;
+  string systemVolume = 3;
+  repeated string dataVolumes = 4;
 }
 
 message InstanceId {
   string id = 1;
 }
 
-message VolumeGrpc {
-  string id = 1;
-  string name = 2;
-}
-
 message InstanceGrpc {
   string id = 1;
   string name = 2;
-  VolumeGrpc systemVolume = 3;
+  string systemVolume = 3;
   string instanceType = 4;
   InstanceStateGrpc state = 5;
-  repeated VolumeGrpc dataVolumes = 6;
+  repeated string dataVolumes = 6;
 }
 
 enum InstanceStateGrpc {
