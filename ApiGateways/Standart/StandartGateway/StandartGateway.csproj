@@ -14,9 +14,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.2" />
   </ItemGroup>
 
-  
   <ItemGroup>
-    <Protobuf Include="Protos\greet.proto" GrpcServices="Client" />
+    <Protobuf Include="..\..\..\Services\Disks\Disks.gRPC.Service\Protos\volumes.proto" GrpcServices="Client" />
+    <Protobuf Include="..\..\..\Services\Instances\Instances.API\Protos\instances.proto" GrpcServices="Client" />
   </ItemGroup>
-
 </Project>

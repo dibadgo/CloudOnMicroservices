@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
+using StandartGateway.Other;
+using StandartGateway.Services;
 
 namespace StandartGateway
 {
@@ -27,26 +30,15 @@ namespace StandartGateway
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var identityUrl = Configuration.GetValue<string>("urls:identity");
-            IdentityModelEventSource.ShowPII = true;
+            services.AddControllers();
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            })
-            .AddJwtBearer(options =>
-            {
-                options.Authority = identityUrl;
-                options.RequireHttpsMetadata = false;
-                options.Audience = "gateway";
-            });
-                        
-            services.AddControllers();            
+            services
+                .AddCustomApi(Configuration)
+                .AddCustomAuthentication(Configuration)
+                .AddHttpServices();
+            
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -65,6 +57,57 @@ namespace StandartGateway
             {
                 endpoints.MapControllers();
             });
+        }
+    }
+
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddCustomApi(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<UrlsConfig>(configuration.GetSection("urls"));
+
+            return services;
+        }
+
+        public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            var identityUrl = configuration.GetValue<string>("urls:identity");
+            IdentityModelEventSource.ShowPII = true;
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            })
+            .AddJwtBearer(options =>
+            {
+                options.Authority = identityUrl;
+                options.RequireHttpsMetadata = false;
+                options.Audience = "gateway";
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddHttpServices(this IServiceCollection services)
+        {
+            //register delegating handlers
+            services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            //register http services
+            services
+               .AddHttpClient<GrpcCallerService>()
+               .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+
+            services
+                .AddHttpClient<IVolumeSevice, VolumeService>()
+                .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+            
+            //services.AddHttpClient<ICatalogService, CatalogService>()
+
+            return services;
         }
     }
 }
