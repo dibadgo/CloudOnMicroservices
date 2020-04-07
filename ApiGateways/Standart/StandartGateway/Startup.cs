@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,7 +14,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.OpenApi.Models;
 using StandartGateway.Other;
 using StandartGateway.Services;
 
@@ -53,6 +56,12 @@ namespace StandartGateway
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseSwagger()
+                .UseSwaggerUI(setup =>
+                {
+                    setup.SwaggerEndpoint("/swagger/v1/swagger.json", "SearchMicroservice.API V1");
+                });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -66,6 +75,21 @@ namespace StandartGateway
         {
             services.Configure<UrlsConfig>(configuration.GetSection("urls"));
 
+            //Swagger
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "API Gateway",
+                    Version = "v1",
+                    Description = "Gateway HTTP API"
+                });
+
+                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+
+                var xmlPath = Path.Combine(basePath, "StandartGateway.xml");
+                options.IncludeXmlComments(xmlPath);
+            });
             return services;
         }
 
@@ -105,8 +129,6 @@ namespace StandartGateway
                 .AddHttpClient<IVolumeSevice, VolumeService>()
                 .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
             
-            //services.AddHttpClient<ICatalogService, CatalogService>()
-
             return services;
         }
     }

@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StandartGateway</name>
+    </assembly>
+    <members>
+        <member name="T:Disks.gRPC.Service.VolumesReflection">
+            <summary>Holder for reflection information generated from volumes.proto</summary>
+        </member>
+        <member name="P:Disks.gRPC.Service.VolumesReflection.Descriptor">
+            <summary>File descriptor for volumes.proto</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.CreateVolumeRequest.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.CreateVolumeRequest.SizeGbFieldNumber">
+            <summary>Field number for the "sizeGb" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.CreateVolumeRequest.OsTypeFieldNumber">
+            <summary>Field number for the "osType" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.CreateVolumeRequest.MountPintsFieldNumber">
+            <summary>Field number for the "mountPints" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.VolumeReply.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.VolumeReply.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.VolumeReply.SizeGbFieldNumber">
+            <summary>Field number for the "sizeGb" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.VolumeReply.MountPointsFieldNumber">
+            <summary>Field number for the "mountPoints" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.GetVolume.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="P:Disks.gRPC.Service.Volume.Descriptor">
+            <summary>Service descriptor</summary>
+        </member>
+        <member name="T:Disks.gRPC.Service.Volume.VolumeClient">
+            <summary>Client for Volume</summary>
+        </member>
+        <member name="M:Disks.gRPC.Service.Volume.VolumeClient.#ctor(Grpc.Core.ChannelBase)">
+            <summary>Creates a new client for Volume</summary>
+            <param name="channel">The channel to use to make remote calls.</param>
+        </member>
+        <member name="M:Disks.gRPC.Service.Volume.VolumeClient.#ctor(Grpc.Core.CallInvoker)">
+            <summary>Creates a new client for Volume that uses a custom <c>CallInvoker</c>.</summary>
+            <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+        </member>
+        <member name="M:Disks.gRPC.Service.Volume.VolumeClient.#ctor">
+            <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+        </member>
+        <member name="M:Disks.gRPC.Service.Volume.VolumeClient.#ctor(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Protected constructor to allow creation of configured clients.</summary>
+            <param name="configuration">The client configuration.</param>
+        </member>
+        <member name="M:Disks.gRPC.Service.Volume.VolumeClient.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+        </member>
+        <member name="T:Instances.API.InstancesReflection">
+            <summary>Holder for reflection information generated from instances.proto</summary>
+        </member>
+        <member name="P:Instances.API.InstancesReflection.Descriptor">
+            <summary>File descriptor for instances.proto</summary>
+        </member>
+        <member name="F:Instances.API.LaunchInstanceRequest.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:Instances.API.LaunchInstanceRequest.InstanceTypeFieldNumber">
+            <summary>Field number for the "instanceType" field.</summary>
+        </member>
+        <member name="F:Instances.API.LaunchInstanceRequest.SystemVolumeFieldNumber">
+            <summary>Field number for the "systemVolume" field.</summary>
+        </member>
+        <member name="F:Instances.API.LaunchInstanceRequest.DataVolumesFieldNumber">
+            <summary>Field number for the "dataVolumes" field.</summary>
+        </member>
+        <member name="F:Instances.API.InstanceId.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:Instances.API.VolumeGrpc.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:Instances.API.VolumeGrpc.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:Instances.API.InstanceGrpc.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:Instances.API.InstanceGrpc.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:Instances.API.InstanceGrpc.SystemVolumeFieldNumber">
+            <summary>Field number for the "systemVolume" field.</summary>
+        </member>
+        <member name="F:Instances.API.InstanceGrpc.InstanceTypeFieldNumber">
+            <summary>Field number for the "instanceType" field.</summary>
+        </member>
+        <member name="F:Instances.API.InstanceGrpc.StateFieldNumber">
+            <summary>Field number for the "state" field.</summary>
+        </member>
+        <member name="F:Instances.API.InstanceGrpc.DataVolumesFieldNumber">
+            <summary>Field number for the "dataVolumes" field.</summary>
+        </member>
+        <member name="P:Instances.API.Instances.Descriptor">
+            <summary>Service descriptor</summary>
+        </member>
+        <member name="T:Instances.API.Instances.InstancesClient">
+            <summary>Client for Instances</summary>
+        </member>
+        <member name="M:Instances.API.Instances.InstancesClient.#ctor(Grpc.Core.ChannelBase)">
+            <summary>Creates a new client for Instances</summary>
+            <param name="channel">The channel to use to make remote calls.</param>
+        </member>
+        <member name="M:Instances.API.Instances.InstancesClient.#ctor(Grpc.Core.CallInvoker)">
+            <summary>Creates a new client for Instances that uses a custom <c>CallInvoker</c>.</summary>
+            <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+        </member>
+        <member name="M:Instances.API.Instances.InstancesClient.#ctor">
+            <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+        </member>
+        <member name="M:Instances.API.Instances.InstancesClient.#ctor(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Protected constructor to allow creation of configured clients.</summary>
+            <param name="configuration">The client configuration.</param>
+        </member>
+        <member name="M:Instances.API.Instances.InstancesClient.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+        </member>
+    </members>
+</doc>
