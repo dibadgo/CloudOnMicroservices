@@ -17,26 +17,34 @@ static_resources:
           codec_type: auto
           stat_prefix: ingress_http
           route_config:
-            name: eshop_backend_route
+            name: incloud_backend_route
             virtual_hosts:
-            - name: migration_backend
+            - name: incloud_backend
               domains:
               - "*"
               routes:
-              - name: "workload"
+               - name: "identity"
                 match:
-                  prefix: "/workload/"
+                  prefix: "/identity/"
                 route:
                   auto_host_rewrite: true
-                  prefix_rewrite: "/workload/"
-                  cluster: workload
-              - name: "agg"
+                  prefix_rewrite: "/"
+                  cluster: volumes
+
+              - name: "volumes"
+                match:
+                  prefix: "/volumes/"
+                route:
+                  auto_host_rewrite: true
+                  prefix_rewrite: "/"
+                  cluster: volumes
+              - name: "instances"
                 match:
                   prefix: "/"
                 route:
                   auto_host_rewrite: true
                   prefix_rewrite: "/"
-                  cluster: migration
+                  cluster: instances
           http_filters:
           - name: envoy.router
           access_log:
@@ -58,20 +66,20 @@ static_resources:
                 upstream_local_address: "%UPSTREAM_LOCAL_ADDRESS%"
               path: "/tmp/access.log"
   clusters:
-  - name: migration
+  - name: volumes
     connect_timeout: 0.25s
     type: strict_dns
     lb_policy: round_robin
     hosts:
     - socket_address:
-        address: 127.0.0.1
-        port_value: 5000
-  - name: workload
+        address: volumes-api
+        port_value: 5001
+  - name: instances
     connect_timeout: 0.25s
     type: strict_dns
     lb_policy: round_robin
     hosts:
     - socket_address:
-        address: 127.0.0.1
-        port_value: 5000
+        address: instances-api
+        port_value: 5001
 ~

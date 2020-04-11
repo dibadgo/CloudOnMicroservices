@@ -12,44 +12,86 @@ services:
   
 # Databases ------------------------------------------------------
 
-  db-mssqlserver:
+  mssqlserver:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-16.04
     restart: always
     environment:
         ACCEPT_EULA: Y
         SA_PASSWORD: "InCloudP@66w0rd2z"
-    expose:
-        - 1433:1433
+    ports:
+        - 8711:1433
     volumes:
-        - /var/incloud/db-mssqlserver/data:/var/opt/mssql/data
-        - /var/incloud/db-mssqlserver/log:/var/opt/mssql/log
-        - /var/incloud/db-mssqlserver/secrets:/var/opt/mssql/secrets
+        - /opt/incloud/db/mssqlserver/data:/var/opt/mssql/data
+        - /opt/incloud/db/mssqlserver/log:/var/opt/mssql/log
+        - /opt/incloud/db/mssqlserver/secrets:/var/opt/mssql/secrets
     networks:
         - incloudnetwork
+ 
+  redis:
+    build: ./Redis/
+    restart: always
+    volumes:
+      - /opt/incloud/db/redis/data:/data
+    ports:
+      - 8712:6379
+
 
 # Services ------------------------------------------------------
 
-  std_gateway:
-    build: ./APIGateways/Standarrt/StandartGateway
+  std-gateway:
+    build: ./ApiGateways/Standart/StandartGateway/
     restart: always
     networks:
       - incloudnetwork
+    depends_on:
+        - envoy
+    links:
+        - envoy:envoy
+    environment:
+        - "ASPNETCORE_URLS=http://*:5000;https://*:5001"
+        - "ASPNETCORE_urls__identity=envoy/identity"
+        - "ASPNETCORE_urls__volumes=envoy/volumes"
+        - "ASPNETCORE_urls__instances=envoy/instances"
+    ports:
+        - 8717:5000
+        - 8718:5001
+    networks:
+        - incloudnetwork
 
   identity-api:
     build: ./Services/Identity/Identity.API
     restart: always
     depends_on:
-        - db-mssqlserver
+        - mssqlserver
     links:
-        - db-mssqlserver:localdb
+        - mssqlserver:mssqlserver
     environment:
-        ASPNETCORE_URLS: http://*:5000;https://*:5001
+        - ASPNETCORE_URLS=http://*:5000;https://*:5001
+        - ASPNETCORE_ConnectionStrings__IdentityDbContext=Server=mssqlserver;Database=incloudidentityservice;User id=sa;Password=InCloudP@66w0rd2z;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=false
     ports:
-        - 6100:5000
-        - 6101:5001
+        - 8713:5000
+        - 8714:5001
     networks:
         - incloudnetwork
 
+  volumes-api:
+    build:
+      context: ./Services/
+      dockerfile: Dockerfile.volumes
+    restart: always
+    depends_on:
+        - redis
+    links:
+        - redis:redis
+    environment:
+        - ASPNETCORE_URLS=http://*:5000;https://*:5001
+    ports:
+        - 8715:5000
+        - 8716:5001
+    networks:
+        - incloudnetwork
+
+  
 
 networks:
    incloudnetwork:
