@@ -24,4 +24,10 @@
     <ProjectReference Include="..\..\Common\CommonLib\CommonLib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Certificate\localhost.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

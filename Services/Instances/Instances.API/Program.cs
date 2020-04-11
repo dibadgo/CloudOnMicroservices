@@ -21,7 +21,17 @@ namespace Instances.API
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                       .ConfigureKestrel(serverOptions =>
+                       {
+                           serverOptions.AllowSynchronousIO = true;
+                           serverOptions.ConfigureHttpsDefaults(listenOptions =>
+                           {
+                                 // certificate is an X509Certificate2
+                                 listenOptions.ServerCertificate = Certificate.Certificate.Get();
+                           });
+                       })
+                       .UseStartup<Startup>();
                 });
     }
 }

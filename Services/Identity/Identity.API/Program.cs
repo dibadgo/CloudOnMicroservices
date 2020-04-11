@@ -19,21 +19,17 @@ namespace Identity.API
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                //.ConfigureAppConfiguration((hostingContext, config) =>
-                //{
-                //    config.AddEnvironmentVariables(prefix: "InCloud_");
-                //})
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder                       
                         .ConfigureKestrel(serverOptions =>
                         {
                             serverOptions.AllowSynchronousIO = true;
-                            //serverOptions.ConfigureHttpsDefaults(listenOptions =>
-                            //{
-                            //    // certificate is an X509Certificate2
-                            //    listenOptions.ServerCertificate = Certificate.Certificate.Get();                                
-                            //});
+                            serverOptions.ConfigureHttpsDefaults(listenOptions =>
+                            {
+                                // certificate is an X509Certificate2
+                                listenOptions.ServerCertificate = Certificate.Certificate.Get();
+                            });
                         })
                         .UseStartup<Startup>();
                 });
