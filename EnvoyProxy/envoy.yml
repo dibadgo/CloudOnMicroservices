@@ -24,27 +24,28 @@ static_resources:
               - "*"
               routes:
                - name: "identity"
-                match:
-                  prefix: "/identity/"
-                route:
+                 match:
+                   prefix: "/identity/"
+                 route:
                   auto_host_rewrite: true
                   prefix_rewrite: "/"
                   cluster: volumes
 
-              - name: "volumes"
-                match:
-                  prefix: "/volumes/"
-                route:
-                  auto_host_rewrite: true
-                  prefix_rewrite: "/"
-                  cluster: volumes
-              - name: "instances"
-                match:
-                  prefix: "/"
-                route:
-                  auto_host_rewrite: true
-                  prefix_rewrite: "/"
-                  cluster: instances
+               - name: "volumes"
+                 match:
+                   prefix: "/volumes/"
+                 route:
+                   auto_host_rewrite: true
+                   prefix_rewrite: "/"
+                   cluster: volumes
+              
+               - name: "instances"
+                 match:
+                   prefix: "/"
+                 route:
+                   auto_host_rewrite: true
+                   prefix_rewrite: "/"
+                   cluster: instances
           http_filters:
           - name: envoy.router
           access_log:
@@ -82,4 +83,4 @@ static_resources:
     - socket_address:
         address: instances-api
         port_value: 5001
-~
+
