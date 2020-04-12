@@ -7,6 +7,9 @@ services:
   envoy:
     build: ./EnvoyProxy/
     restart: always
+    ports:
+      - 8705:80
+      - 8706:8001
     networks:
        - incloudnetwork
   

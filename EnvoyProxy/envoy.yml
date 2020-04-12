@@ -29,7 +29,7 @@ static_resources:
                  route:
                   auto_host_rewrite: true
                   prefix_rewrite: "/"
-                  cluster: volumes
+                  cluster: identity
 
                - name: "volumes"
                  match:
@@ -41,7 +41,7 @@ static_resources:
               
                - name: "instances"
                  match:
-                   prefix: "/"
+                   prefix: "/instances"
                  route:
                    auto_host_rewrite: true
                    prefix_rewrite: "/"
@@ -82,5 +82,14 @@ static_resources:
     hosts:
     - socket_address:
         address: instances-api
+        port_value: 5001
+ 
+  - name: identity
+    connect_timeout: 0.25s
+    type: strict_dns
+    lb_policy: round_robin
+    hosts:
+    - socket_address:
+        address: identity-api
         port_value: 5001
 
