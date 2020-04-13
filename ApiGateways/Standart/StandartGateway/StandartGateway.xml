@@ -24,7 +24,7 @@
             The Os type on the volume
             </summary>
         </member>
-        <member name="P:StandartGateway.VolumeConfigurationBindModel.MountPints">
+        <member name="P:StandartGateway.VolumeConfigurationBindModel.MountPoints">
             <summary>
             All mount points on the disk
             </summary>
@@ -59,6 +59,47 @@
             Constructor
             </summary>
         </member>
+        <member name="T:StandartGateway.Controllers.InstancesController">
+            <summary>
+            The controller for instances managment
+            </summary>
+        </member>
+        <member name="M:StandartGateway.Controllers.InstancesController.#ctor(StandartGateway.Services.IInstanceDataSource,StandartGateway.Services.IVolumeDataSource,Microsoft.Extensions.Logging.ILogger{StandartGateway.Controllers.InstancesController})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="instanceDataSource"></param>
+            <param name="volumeDataSource"></param>
+            <param name="logger"></param>
+        </member>
+        <member name="M:StandartGateway.Controllers.InstancesController.Launch(StandartGateway.BindModels.LaunchInstanceConfiguration)">
+            <summary>
+            Launch a new instance
+            </summary>
+            <param name="instanceConfiguration">Instance configuration</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Controllers.InstancesController.Start(System.String)">
+            <summary>
+            Start the instance
+            </summary>
+            <param name="instanceId">Instance Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Controllers.InstancesController.Stop(System.String)">
+            <summary>
+            Stop the instance
+            </summary>
+            <param name="instanceId">Instance Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Controllers.InstancesController.Terminate(System.String)">
+            <summary>
+            Terminate the instance
+            </summary>
+            <param name="instanceId">Instance Id</param>
+            <returns></returns>
+        </member>
         <member name="T:StandartGateway.Controllers.VolumesController">
             <summary>
             
@@ -74,7 +115,7 @@
             Volume services
             </summary>
         </member>
-        <member name="M:StandartGateway.Controllers.VolumesController.#ctor(Microsoft.Extensions.Logging.ILogger{StandartGateway.Controllers.VolumesController},StandartGateway.Services.IVolumeSevice)">
+        <member name="M:StandartGateway.Controllers.VolumesController.#ctor(Microsoft.Extensions.Logging.ILogger{StandartGateway.Controllers.VolumesController},StandartGateway.Services.IVolumeDataSource)">
             <summary>
             Constructor
             </summary>
@@ -101,6 +142,34 @@
             <param name="configuration">The configuration for a new volume</param>
             <returns></returns>
         </member>
+        <member name="M:StandartGateway.Services.IInstanceDataSource.LaunchAsync(StandartGateway.BindModels.LaunchInstanceConfiguration)">
+            <summary>
+            Launch a new instance by the provided confiduration
+            </summary>
+            <param name="configuration">Configurations</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.IInstanceDataSource.StartAsync(System.String)">
+            <summary>
+            Start the instance
+            </summary>
+            <param name="instanceId">The instance id</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.IInstanceDataSource.StopAsync(System.String)">
+            <summary>
+            Stop the instance
+            </summary>
+            <param name="instanceId">The instance id</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.IInstanceDataSource.TerminateAsync(System.String)">
+            <summary>
+            Terminate the instance
+            </summary>
+            <param name="instanceId">Instance id</param>
+            <returns></returns>
+        </member>
         <member name="M:StandartGateway.Services.InstancesService.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Logging.ILogger{StandartGateway.Services.InstancesService},Microsoft.Extensions.Options.IOptions{StandartGateway.Other.UrlsConfig},StandartGateway.Services.GrpcCallerService)">
             <summary>
             Constructors
@@ -110,28 +179,28 @@
             <param name="config"></param>
             <param name="grpcCallerService"></param>
         </member>
-        <member name="M:StandartGateway.Services.InstancesService.Launch(StandartGateway.BindModels.LaunchInstanceConfiguration)">
+        <member name="M:StandartGateway.Services.InstancesService.LaunchAsync(StandartGateway.BindModels.LaunchInstanceConfiguration)">
             <summary>
             Launch a new instance by the provided confiduration
             </summary>
             <param name="configuration">Configurations</param>
             <returns></returns>
         </member>
-        <member name="M:StandartGateway.Services.InstancesService.Start(System.String)">
+        <member name="M:StandartGateway.Services.InstancesService.StartAsync(System.String)">
             <summary>
             Start the instance
             </summary>
             <param name="instanceId">The instance id</param>
             <returns></returns>
         </member>
-        <member name="M:StandartGateway.Services.InstancesService.Stop(System.String)">
+        <member name="M:StandartGateway.Services.InstancesService.StopAsync(System.String)">
             <summary>
             Stop the instance
             </summary>
             <param name="instanceId">The instance id</param>
             <returns></returns>
         </member>
-        <member name="M:StandartGateway.Services.InstancesService.Terminate(System.String)">
+        <member name="M:StandartGateway.Services.InstancesService.TerminateAsync(System.String)">
             <summary>
             Terminate the instance
             </summary>

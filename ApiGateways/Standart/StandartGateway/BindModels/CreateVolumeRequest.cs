@@ -25,6 +25,6 @@ namespace StandartGateway
         /// <summary>
         /// All mount points on the disk
         /// </summary>
-        public List<string> MountPints { get; set; }
+        public List<string> MountPoints { get; set; }
     }
 }
