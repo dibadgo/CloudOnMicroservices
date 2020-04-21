@@ -12,8 +12,8 @@ namespace Logging.Service.Handlers
     public class ConsumeRabbitMQHostedService : BackgroundService
     {
         private ILogger<ConsumeRabbitMQHostedService> logger;
-        private IConnection _connection;
-        private IModel _channel;
+        private IConnection connection;
+        private IModel channel;
         private readonly RabbitMqOptions rabbitMqOptions;
 
         public ConsumeRabbitMQHostedService(ILogger<ConsumeRabbitMQHostedService> logger, RabbitMqOptions rabbitMqOptions)
@@ -28,29 +28,29 @@ namespace Logging.Service.Handlers
         {
             var factory = new ConnectionFactory { HostName = rabbitMqOptions.HostName, Port = rabbitMqOptions.Port };
             
-            _connection = factory.CreateConnection();
+            connection = factory.CreateConnection();
 
-            _channel = _connection.CreateModel();
+            channel = connection.CreateModel();
 
-            _channel.ExchangeDeclare(rabbitMqOptions.Exchange, ExchangeType.Topic);
-            _channel.QueueDeclare(rabbitMqOptions.Queue, false, false, false, null);
-            _channel.QueueBind(rabbitMqOptions.Queue, rabbitMqOptions.Exchange, rabbitMqOptions.Routekey, null);
-            _channel.BasicQos(0, 1, false);
+            channel.ExchangeDeclare(rabbitMqOptions.Exchange, ExchangeType.Topic);
+            channel.QueueDeclare(rabbitMqOptions.Queue, false, false, false, null);
+            channel.QueueBind(rabbitMqOptions.Queue, rabbitMqOptions.Exchange, rabbitMqOptions.Routekey, null);
+            channel.BasicQos(0, 1, false);
 
-            _connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;
+            connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             stoppingToken.ThrowIfCancellationRequested();
 
-            var consumer = new EventingBasicConsumer(_channel);
+            var consumer = new EventingBasicConsumer(channel);
             consumer.Received += (ch, ea) =>
             {
                 var content = System.Text.Encoding.UTF8.GetString(ea.Body);
 
                 HandleMessage(content);
-                _channel.BasicAck(ea.DeliveryTag, false);
+                channel.BasicAck(ea.DeliveryTag, false);
             };
 
             consumer.Shutdown += OnConsumerShutdown;
@@ -58,24 +58,18 @@ namespace Logging.Service.Handlers
             consumer.Unregistered += OnConsumerUnregistered;
             consumer.ConsumerCancelled += OnConsumerConsumerCancelled;
 
-            _channel.BasicConsume(rabbitMqOptions.Queue, false, consumer);
+            channel.BasicConsume(rabbitMqOptions.Queue, false, consumer);
             return Task.CompletedTask;
         }
 
         private void HandleMessage(string content)
         {
-            // string content = JsonConvert.SerializeObject(specialistBindModel);
-            CustomServiceLogEvent log = JsonConvert.DeserializeObject<CustomServiceLogEvent>(content);
-
-            switch (log.LogType)
-            {
-                case LogType.INFO:
-                    logger.LogInformation($"Module: {log.ModuleName}, Time: {log.Time}, Message: {log.Message}");
-                    break;
-                case LogType.ERROR:
-                    logger.LogError($"Module: {log.ModuleName}, Time: {log.Time}, Message: {log.Message}");
-                    break;
-            }
+            if (content.StartsWith("Error"))
+                logger.LogError(content);
+            else if (content.StartsWith("ritical"))
+                logger.LogCritical(content);
+            else
+                logger.LogDebug(content);
         }
 
         private void OnConsumerConsumerCancelled(object sender, ConsumerEventArgs e) { }
@@ -86,8 +80,8 @@ namespace Logging.Service.Handlers
 
         public override void Dispose()
         {
-            _channel.Close();
-            _connection.Close();
+            channel.Close();
+            connection.Close();
             base.Dispose();
         }
     }

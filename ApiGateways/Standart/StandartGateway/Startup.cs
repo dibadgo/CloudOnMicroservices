@@ -1,26 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using EventBus.RabbitMQ.Standard.Configuration;
-using EventBus.RabbitMQ.Standard.Options;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using CommonLib.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.PlatformAbstractions;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.OpenApi.Models;
-using StandartGateway.Other;
-using StandartGateway.Services;
+
 
 namespace StandartGateway
 {
@@ -41,8 +25,8 @@ namespace StandartGateway
                 .AddCustomApi(Configuration)
                 .AddCustomAuthentication(Configuration)
                 .AddHttpServices()
-                .AddRabbitMq(Configuration);
-            
+                .AddRabbitMq(Configuration)
+                .AddLoggerProvider(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -69,80 +53,6 @@ namespace StandartGateway
             {
                 endpoints.MapControllers();
             });
-        }
-    }
-
-    public static class ServiceCollectionExtensions
-    {
-        public static IServiceCollection AddRabbitMq(this IServiceCollection services, IConfiguration configuration)
-        {
-            var rabbitMqOptions = configuration.GetSection("RabbitMq").Get<RabbitMqOptions>();
-
-            services.AddRabbitMqConnection(rabbitMqOptions);
-            services.AddRabbitMqRegistration(rabbitMqOptions);
-
-            return services;
-        }
-
-        public static IServiceCollection AddCustomApi(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.Configure<UrlsConfig>(configuration.GetSection("urls"));
-
-            //Swagger
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "API Gateway",
-                    Version = "v1",
-                    Description = "Gateway HTTP API"
-                });
-
-                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-
-                var xmlPath = Path.Combine(basePath, "StandartGateway.xml");
-                options.IncludeXmlComments(xmlPath);
-            });
-            return services;
-        }
-
-        public static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
-        {
-            var identityUrl = configuration.GetValue<string>("urls:identity");
-            IdentityModelEventSource.ShowPII = true;
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            })
-            .AddJwtBearer(options =>
-            {
-                options.Authority = identityUrl;
-                options.RequireHttpsMetadata = false;
-                options.Audience = "gateway";
-            });
-
-            return services;
-        }
-
-        public static IServiceCollection AddHttpServices(this IServiceCollection services)
-        {
-            //register delegating handlers
-            services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            //register http services
-            services
-               .AddHttpClient<GrpcCallerService>()
-               .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
-
-            services
-                .AddHttpClient<IVolumeDataSource, VolumeService>()
-                .AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
-            
-            return services;
         }
     }
 }
