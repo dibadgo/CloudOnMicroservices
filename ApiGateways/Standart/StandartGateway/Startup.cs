@@ -4,6 +4,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using EventBus.RabbitMQ.Standard.Configuration;
+using EventBus.RabbitMQ.Standard.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,7 +40,8 @@ namespace StandartGateway
             services
                 .AddCustomApi(Configuration)
                 .AddCustomAuthentication(Configuration)
-                .AddHttpServices();
+                .AddHttpServices()
+                .AddRabbitMq(Configuration);
             
         }
 
@@ -71,6 +74,16 @@ namespace StandartGateway
 
     public static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddRabbitMq(this IServiceCollection services, IConfiguration configuration)
+        {
+            var rabbitMqOptions = configuration.GetSection("RabbitMq").Get<RabbitMqOptions>();
+
+            services.AddRabbitMqConnection(rabbitMqOptions);
+            services.AddRabbitMqRegistration(rabbitMqOptions);
+
+            return services;
+        }
+
         public static IServiceCollection AddCustomApi(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<UrlsConfig>(configuration.GetSection("urls"));
