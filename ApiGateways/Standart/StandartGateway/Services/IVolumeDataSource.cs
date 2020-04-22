@@ -30,5 +30,12 @@ namespace StandartGateway.Services
         /// <returns></returns>
 
         Task<List<VolumeReply>> Volumes();
+
+        /// <summary>
+        /// Get list of volumes for user
+        /// </summary>
+        /// <returns></returns>
+
+        Task<VolumeReply> Test();
     }
 }

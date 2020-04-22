@@ -105,5 +105,22 @@ namespace StandartGateway.Services
                 return volumes;
             });
         }
+        /// <summary>
+        /// Make a test gRPC call to the Volumes service
+        /// </summary>
+        /// <returns></returns>
+        public async Task<VolumeReply> Test()
+        {
+            return await grpcCallerService.CallService(urls.Volumes, async channel =>
+            {
+                var client = new Volume.VolumeClient(channel);
+
+                logger.LogDebug("grpc client created, request = {@id}", "");
+                var response = await client.TestAsync(new Empty());
+                logger.LogDebug("grpc client replyed");
+
+                return response;
+            });
+        }
     }
 }

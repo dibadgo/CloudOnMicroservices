@@ -77,5 +77,18 @@ namespace StandartGateway.Controllers
 
             return Ok(resp);
         }
+
+        /// <summary>
+        /// Make a test call to volume service
+        /// </summary>
+        /// <param name="configuration">The configuration for a new volume</param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IActionResult> Test()
+        {
+            var resp = await volumeSevice.Test();
+
+            return Ok(resp);
+        }
     }
 }

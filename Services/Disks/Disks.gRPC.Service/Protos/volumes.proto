@@ -9,6 +9,7 @@ service Volume {
   rpc Create (CreateVolumeRequest) returns (VolumeReply);
   rpc List (Empty) returns (stream VolumeReply);
   rpc Get (GetVolume) returns (VolumeReply);
+  rpc Test (Empty) returns (VolumeReply);
  }
 
 message CreateVolumeRequest {

@@ -79,5 +79,22 @@ namespace Disks.gRPC.Service.Services
             foreach (VolumeReply reply in await volumeDataSource.List(userId))
                 await responseStream.WriteAsync(reply);
         }
+        /// <summary>
+        /// Only test purpuses
+        /// </summary>
+        /// <param name="request">Requst</param>
+        /// <param name="context">Responce stream</param>
+        /// <returns></returns>
+        public override Task<VolumeReply> Test(Empty request, ServerCallContext context)
+        {
+            VolumeReply reply = new VolumeReply()
+            {
+                Id = "Test voilume id",
+                Name = "TestVolume",
+                SizeGb = -1
+            };
+
+            return Task.FromResult(reply);
+        }
     }
 }
