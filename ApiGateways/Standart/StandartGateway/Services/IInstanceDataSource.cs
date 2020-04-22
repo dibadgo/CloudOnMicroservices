@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace StandartGateway.Services
 {
+    /// <summary>
+    /// Manage of instances
+    /// </summary>
     public interface IInstanceDataSource
     {
         /// <summary>

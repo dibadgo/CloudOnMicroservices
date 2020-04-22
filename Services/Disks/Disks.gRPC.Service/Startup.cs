@@ -1,4 +1,5 @@
-﻿using CommonLib.Services;
+﻿using CommonLib.Logging;
+using CommonLib.Services;
 using Disks.gRPC.Service.Repos;
 using Disks.gRPC.Service.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 
 namespace Disks.gRPC.Service
@@ -30,10 +32,11 @@ namespace Disks.gRPC.Service
             services.AddScoped<IVolumeDataSource, VolumesRepository>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<IIdentityService, IdentityService>();           
+            services.AddTransient<IIdentityService, IdentityService>();
+
+            AddLoggerProvider(services);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -82,5 +85,16 @@ namespace Disks.gRPC.Service
             });
         }
 
+        public IServiceCollection AddLoggerProvider(IServiceCollection services)
+        {
+            services.AddRabbitMq(Configuration);
+
+            var loggerFactory = new LoggerFactory();
+
+            services.AddLogging(configure => configure.AddConsole());
+            services.AddLogging(configure => configure.CustomLogger());
+
+            return services;
+        }
     }
 }

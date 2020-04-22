@@ -1,12 +1,22 @@
-using CommonLib.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using EventBus.Base.Standard;
+using EventBus.Base.Standard.Configuration;
+using EventBus.RabbitMQ.Standard.Configuration;
+using EventBus.RabbitMQ.Standard.Options;
+using Logging.Service.Handlers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-
-namespace StandartGateway
+namespace Logging.Service
 {
     public class Startup
     {
@@ -19,14 +29,15 @@ namespace StandartGateway
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            RabbitMqOptions rabbitMqOptions = Configuration.GetSection("RabbitMq").Get<RabbitMqOptions>();
 
-            services
-                .AddCustomApi(Configuration)
-                .AddCustomAuthentication(Configuration)
-                .AddHttpServices()
-                .AddRabbitMq(Configuration)
-                .AddLoggerProvider(Configuration);
+            services.AddHostedService<ConsumeRabbitMQHostedService>(f =>
+            {
+                var logger = f.GetRequiredService<ILogger<ConsumeRabbitMQHostedService>>();
+                return new ConsumeRabbitMQHostedService(logger, rabbitMqOptions);
+            });
+
+            services.AddControllers();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -40,14 +51,7 @@ namespace StandartGateway
 
             app.UseRouting();
 
-            app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseSwagger()
-                .UseSwaggerUI(setup =>
-                {
-                    setup.SwaggerEndpoint("/swagger/v1/swagger.json", "StandartGateway V1");
-                });
 
             app.UseEndpoints(endpoints =>
             {

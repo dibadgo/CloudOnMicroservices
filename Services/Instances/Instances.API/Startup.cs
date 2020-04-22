@@ -17,6 +17,8 @@ using CommonLib.Services;
 using CommonLib;
 using Instances.API.Models;
 using Instances.API.Adapters;
+using CommonLib.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace Instances.API
 {
@@ -28,7 +30,7 @@ namespace Instances.API
         }
 
         public IConfiguration Configuration { get; }
-       
+
         public void ConfigureServices(IServiceCollection services)
         {
             ConfigureAuthService(services);
@@ -41,9 +43,11 @@ namespace Instances.API
 
             services.AddScoped<IAdapter<Instance, InstanceGrpc>, InstanceAdapter>();
             services.AddScoped<IAdapter<LaunchInstanceRequest, Instance>, InstanceAdapter>();
-            
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IIdentityService, IdentityService>();
+
+            AddLoggerProvider(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -85,6 +89,19 @@ namespace Instances.API
                 options.RequireHttpsMetadata = false;
                 options.Audience = "instances";
             });
+        }
+
+
+        public IServiceCollection AddLoggerProvider(IServiceCollection services)
+        {
+            services.AddRabbitMq(Configuration);
+
+            var loggerFactory = new LoggerFactory();
+
+            services.AddLogging(configure => configure.AddConsole());
+            services.AddLogging(configure => configure.CustomLogger());
+
+            return services;
         }
     }
 }

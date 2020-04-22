@@ -13,7 +13,7 @@ using StandartGateway.Services;
 namespace StandartGateway.Controllers
 {
     /// <summary>
-    /// 
+    /// Volumes controller
     /// </summary>
     [Authorize]
     [ApiController]
@@ -38,7 +38,7 @@ namespace StandartGateway.Controllers
             this.logger = logger;
             this.volumeSevice = volumeSevice;
         }
-        
+
         /// <summary>
         /// Searchi a volume by Id
         /// </summary>
