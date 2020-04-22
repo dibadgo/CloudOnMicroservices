@@ -59,7 +59,6 @@ services:
 # Services ------------------------------------------------------
 
   std-gateway:
-    build: ./ApiGateways/Standart/StandartGateway/
     restart: always
     networks:
       - incloudnetwork

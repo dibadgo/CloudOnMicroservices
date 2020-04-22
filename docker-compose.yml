@@ -35,7 +35,11 @@ services:
 # Services ------------------------------------------------------
 
   std-gateway:
-    build: ./ApiGateways/Standart/StandartGateway/
+    #build: ./ApiGateways/Standart/StandartGateway/
+    build:
+      context: .
+      dockerfile: ./ApiGateways/Standart/StandartGateway/Dockerfile
+
     restart: always
     networks:
       - incloudnetwork
