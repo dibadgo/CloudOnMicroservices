@@ -26,8 +26,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EnvoyProxy", "EnvoyProxy", "{64F661C5-5B85-457A-9D10-BCDF601AA9ED}"
 	ProjectSection(SolutionItems) = preProject
-		ApiGateways\Standart\StandartGateway\Dockerfile = ApiGateways\Standart\StandartGateway\Dockerfile
-		envoy.yml = envoy.yml
+		EnvoyProxy\Dockerfile = EnvoyProxy\Dockerfile
+		EnvoyProxy\envoy.yml = EnvoyProxy\envoy.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Instances", "Instances", "{8674E54D-0833-4926-BDF3-83001BB885B7}"
@@ -36,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Instances.API", "Services\I
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{5A066737-5B7C-4B0F-9506-9A3F1495251A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLib", "Services\Common\CommonLib\CommonLib.csproj", "{9A6A0D03-49B9-4BE9-9162-F9D60EDE6B15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonLib", "Services\Common\CommonLib\CommonLib.csproj", "{9A6A0D03-49B9-4BE9-9162-F9D60EDE6B15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

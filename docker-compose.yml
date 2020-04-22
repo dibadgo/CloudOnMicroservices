@@ -2,54 +2,67 @@ version: '3.1'
 
 services:
 
-# Proxy ------------------------------------------------------
+# ReverseProxy ------------------------------------------------------
 
   envoy:
     build: ./EnvoyProxy/
-    restart: always
+    restart: always   
     networks:
        - incloudnetwork
   
 # Databases ------------------------------------------------------
 
-  db-mssqlserver:
+  mssqlserver:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-16.04
-    restart: always
-    environment:
-        ACCEPT_EULA: Y
-        SA_PASSWORD: "InCloudP@66w0rd2z"
-    expose:
-        - 1433:1433
-    volumes:
-        - /var/incloud/db-mssqlserver/data:/var/opt/mssql/data
-        - /var/incloud/db-mssqlserver/log:/var/opt/mssql/log
-        - /var/incloud/db-mssqlserver/secrets:/var/opt/mssql/secrets
+    restart: always   
     networks:
         - incloudnetwork
+ 
+  redis:
+    build: ./Redis/
+    restart: always   
 
-# Services ------------------------------------------------------
-
-  std_gateway:
-    build: ./APIGateways/Standarrt/StandartGateway
-    restart: always
-    networks:
-      - incloudnetwork
+# identity ------------------------------------------------------
 
   identity-api:
     build: ./Services/Identity/Identity.API
     restart: always
     depends_on:
-        - db-mssqlserver
-    links:
-        - db-mssqlserver:localdb
-    environment:
-        ASPNETCORE_URLS: http://*:5000;https://*:5001
-    ports:
-        - 6100:5000
-        - 6101:5001
+        - mssqlserver
     networks:
         - incloudnetwork
 
+# Services ------------------------------------------------------
+
+  std-gateway:
+    build: ./ApiGateways/Standart/StandartGateway/
+    restart: always
+    networks:
+      - incloudnetwork
+    depends_on:
+        - envoy    
+    networks:
+        - incloudnetwork
+
+  volumes-api:
+    build:
+      context: ./Services/
+      dockerfile: Dockerfile.volumes
+    restart: always
+    depends_on:
+        - redis    
+    networks:
+        - incloudnetwork
+
+  instances-api:
+    build:
+      context: ./Services/
+      dockerfile: Dockerfile.instances
+    restart: always
+    depends_on:
+        - mssqlserver   
+    networks:
+        - incloudnetwork
 
 networks:
    incloudnetwork:

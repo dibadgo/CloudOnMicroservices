@@ -72,7 +72,7 @@ namespace StandartGateway.Services
                     SizeGb = bindModel.SizeGb,
                     OsType = bindModel.OsType                    
                 };
-                volumeRequest.MountPints.AddRange(bindModel.MountPints);
+                volumeRequest.MountPints.AddRange(bindModel.MountPoints);
 
                 var response = await client.CreateAsync(volumeRequest);
                 logger.LogDebug("grpc response {@response}", response);
