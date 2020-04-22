@@ -2,37 +2,36 @@ version: '3.1'
 
 services:
 
+# RabbitMq -----------------------------------------------------
+  rabbitmq:
+    ports:
+      - 5672:5672
+      - 4369:4369
+      - 5671:5671
+      - 25672:25672
+      - 15672:15672
+
 # Proxy ------------------------------------------------------
 
-  envoy:
-    build: ./EnvoyProxy/
-    restart: always
+  envoy:   
     ports:
       - 8705:80
-      - 8706:8001
-    networks:
-       - incloudnetwork
+      - 8706:8001   
   
 # Databases ------------------------------------------------------
 
-  mssqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-16.04
-    restart: always
+  mssqlserver:   
     environment:
-        ACCEPT_EULA: Y
-        SA_PASSWORD: "InCloudP@66w0rd2z"
+      ACCEPT_EULA: Y
+      SA_PASSWORD: "InCloudP@66w0rd2z"
     ports:
-        - 8711:1433
+      - 8711:1433
     volumes:
-        - /opt/incloud/db/mssqlserver/data:/var/opt/mssql/data
-        - /opt/incloud/db/mssqlserver/log:/var/opt/mssql/log
-        - /opt/incloud/db/mssqlserver/secrets:/var/opt/mssql/secrets
-    networks:
-        - incloudnetwork
+      - /opt/incloud/db/mssqlserver/data:/var/opt/mssql/data
+      - /opt/incloud/db/mssqlserver/log:/var/opt/mssql/log
+      - /opt/incloud/db/mssqlserver/secrets:/var/opt/mssql/secrets  
  
-  redis:
-    build: ./Redis/
-    restart: always
+  redis:   
     volumes:
       - /opt/incloud/db/redis/data:/data
     ports:
@@ -40,82 +39,52 @@ services:
 
 # identity ------------------------------------------------------
 
-  identity-api:
-    build: ./Services/Identity/Identity.API
-    restart: always
-    depends_on:
-        - mssqlserver
+  identity-api:   
     links:
-        - mssqlserver:mssqlserver
+      - mssqlserver:mssqlserver
     environment:
-        - ASPNETCORE_URLS=http://*:5000;https://*:5001
-        - "ConnectionStrings__IdentityDbContext='Server=mssqlserver;Database=incloudidentityservice;User id=sa;Password=InCloudP@66w0rd2z;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=false'"
+      - ASPNETCORE_URLS=http://*:5000;https://*:5001
+      - "ConnectionStrings__IdentityDbContext='Server=mssqlserver;Database=incloudidentityservice;User id=sa;Password=InCloudP@66w0rd2z;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=false'"
     ports:
-        - 8713:5000
-        - 8714:5001
-    networks:
-        - incloudnetwork
+      - 8713:5000
+      - 8714:5001
 
 # Services ------------------------------------------------------
 
-  std-gateway:
-    restart: always
-    networks:
-      - incloudnetwork
-    depends_on:
-        - envoy
+  std-gateway:   
     links:
-        - envoy:envoy
+      - envoy:envoy
+      - rabbitmq:rabbitmq
     environment:
-        - "ASPNETCORE_URLS=http://*:5000;https://*:5001"
-        - "urls__identity=envoy/identity:80"
-        - "urls__volumes=envoy/volumes:80"
-        - "urls__instances=envoy/instances:80"
+      - "ASPNETCORE_URLS=http://*:5000;https://*:5001"
+      - "urls__identity=envoy/identity:80"
+      - "urls__volumes=envoy/volumes:80"
+      - "urls__instances=envoy/instances:80"
     ports:
-        - 8717:5000
-        - 8718:5001
-    networks:
-        - incloudnetwork
+      - 8717:5000
+      - 8718:5001   
 
-  volumes-api:
-    build:
-      context: ./Services/
-      dockerfile: Dockerfile.volumes
-    restart: always
-    depends_on:
-        - redis
+  volumes-api:   
     links:
-        - redis:redis
+      - redis:redis
+      - rabbitmq:rabbitmq
     environment:
-        - ASPNETCORE_URLS=http://*:5000;https://*:5001
-        - urls__identity=envoy/identity 
-        - Redis__Host=redis
-        - Redis__Port=6379
+      - ASPNETCORE_URLS=http://*:5000;https://*:5001
+      - urls__identity=envoy/identity 
+      - Redis__Host=redis
+      - Redis__Port=6379
     ports:
-        - 8715:5000
-        - 8716:5001
-    networks:
-        - incloudnetwork
+      - 8715:5000
+      - 8716:5001
 
   instances-api:
-    build:
-      context: ./Services/
-      dockerfile: Dockerfile.instances
-    restart: always
-    depends_on:
-        - mssqlserver
     links:
-        - mssqlserver:mssqlserver
+      - mssqlserver:mssqlserver
+      - rabbitmq:rabbitmq
     environment:
-        - ASPNETCORE_URLS=http://*:5000;https://*:5001
-        - urls__identity=envoy/identity 
-        - "ConnectionStrings__InstancesDbContext='Server=mssqlserver;Database=incloudidentityservice;User id=sa;Password=InCloudP@66w0rd2z;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=false'"
+      - ASPNETCORE_URLS=http://*:5000;https://*:5001
+      - urls__identity=envoy/identity 
+      - "ConnectionStrings__InstancesDbContext='Server=mssqlserver;Database=incloudidentityservice;User id=sa;Password=InCloudP@66w0rd2z;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=false'"
     ports:
-        - 8715:5000
-        - 8716:5001
-    networks:
-        - incloudnetwork
-
-networks:
-   incloudnetwork:
-       driver: bridge
+      - 8715:5000
+      - 8716:5001

@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Dockerfile - Copy" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Protobuf Include="Protos\instances.proto" GrpcServices="Server" />
   </ItemGroup>
 
