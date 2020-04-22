@@ -86,5 +86,5 @@ services:
       - urls__identity=envoy/identity 
       - "ConnectionStrings__InstancesDbContext='Server=mssqlserver;Database=incloudidentityservice;User id=sa;Password=InCloudP@66w0rd2z;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=false'"
     ports:
-      - 8715:5000
-      - 8716:5001
+      - 8720:5000
+      - 8721:5001

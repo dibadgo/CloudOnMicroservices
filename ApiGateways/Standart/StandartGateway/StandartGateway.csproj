@@ -35,9 +35,4 @@
     <Protobuf Include="..\..\..\Services\Instances\Instances.API\Protos\instances.proto" GrpcServices="Client" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="CommonLib">
-      <HintPath>CommonLib.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 </Project>
