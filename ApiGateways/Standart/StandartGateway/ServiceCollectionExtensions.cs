@@ -21,7 +21,9 @@ namespace StandartGateway
             var loggerFactory = new LoggerFactory();
 
             services.AddLogging(configure => configure.AddConsole());
-            services.AddLogging(configure => configure.CustomLogger());
+
+            if (configuration.GetValue<bool>("RabbitMq:IsActive"))
+                services.AddLogging(configure => configure.CustomLogger());
 
             return services;
         }

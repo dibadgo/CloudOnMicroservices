@@ -22,8 +22,7 @@ namespace CommonLib.Logging
             this.rabbitMqOptions = rabbitMqOptions;
             this.connection = factory.CreateConnection();
             this.channel = connection.CreateModel();
-            if (rabbitMqOptions.IsActive)
-                this.channel.QueueBind(rabbitMqOptions.Queue, rabbitMqOptions.Exchange, rabbitMqOptions.Routekey, null);
+            this.channel.QueueBind(rabbitMqOptions.Queue, rabbitMqOptions.Exchange, rabbitMqOptions.Routekey, null);
         }
 
         public void Send(string message)

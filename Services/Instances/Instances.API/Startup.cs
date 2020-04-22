@@ -99,7 +99,9 @@ namespace Instances.API
             var loggerFactory = new LoggerFactory();
 
             services.AddLogging(configure => configure.AddConsole());
-            services.AddLogging(configure => configure.CustomLogger());
+
+            if (Configuration.GetValue<bool>("RabbitMq:IsActive"))
+                services.AddLogging(configure => configure.CustomLogger());
 
             return services;
         }
