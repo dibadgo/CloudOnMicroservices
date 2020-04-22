@@ -40,7 +40,7 @@ namespace StandartGateway.Controllers
         }
 
         /// <summary>
-        /// Searchi a volume by Id
+        /// Volume search by Id
         /// </summary>
         /// <param name="volumeId">Volume id (vol-xxxxxxx)</param>
         /// <returns></returns>
@@ -54,7 +54,7 @@ namespace StandartGateway.Controllers
         }
 
         /// <summary>
-        /// Obtain the awailable list of volumes for currents user
+        /// Obtain the available list of volumes for current user
         /// </summary>
         /// <returns></returns>
         [HttpGet]
