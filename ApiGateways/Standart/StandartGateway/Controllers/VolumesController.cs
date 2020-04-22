@@ -84,6 +84,7 @@ namespace StandartGateway.Controllers
         /// <param name="configuration">The configuration for a new volume</param>
         /// <returns></returns>
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Test()
         {
             var resp = await volumeSevice.Test();

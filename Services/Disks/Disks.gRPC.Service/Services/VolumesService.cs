@@ -85,6 +85,7 @@ namespace Disks.gRPC.Service.Services
         /// <param name="request">Requst</param>
         /// <param name="context">Responce stream</param>
         /// <returns></returns>
+        [AllowAnonymous]
         public override Task<VolumeReply> Test(Empty request, ServerCallContext context)
         {
             VolumeReply reply = new VolumeReply()
