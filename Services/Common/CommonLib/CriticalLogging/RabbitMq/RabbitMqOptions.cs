@@ -15,6 +15,7 @@ namespace CommonLib
             Queue = config["RabbitMq:Queue"];
             Routekey = config["RabbitMq:Routekey"];
             EmiterName = config["RabbitMq:EmiterName"];
+            IsActive = Convert.ToBoolean(config["RabbitMq:IsActive"]);
         }
 
         public string HostName { get; set; }
@@ -23,5 +24,6 @@ namespace CommonLib
         public string Queue { get; set; }
         public string Routekey { get; set; }
         public string EmiterName { get; set; }
+        public bool IsActive { get; set; }
     }
 }
