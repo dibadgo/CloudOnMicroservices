@@ -14,10 +14,15 @@ services:
 # Proxy ------------------------------------------------------
 
   envoy:   
+    links:
+      - volumes-api:volumes-api
+      - instances-api:instances-api
+      - identity-api:identity-api
     ports:
-      - 8705:80
+      - 8704:80
+      - 8705:443
       - 8706:8001   
-  
+     
 # Databases ------------------------------------------------------
 
   mssqlserver:   
