@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+option csharp_namespace = "Instances.API";
+
+package instances;
+
+service Instances {
+  rpc Launch (LaunchInstanceRequest) returns (InstanceGrpc);
+  rpc Start (InstanceId) returns (InstanceGrpc);
+  rpc Stop (InstanceId) returns (InstanceGrpc);
+  rpc Terminate (InstanceId) returns (InstanceGrpc);
+}
+
+message LaunchInstanceRequest {
+  string name = 1;  
+  string instanceType = 2;
+  string systemVolume = 3;
+  repeated string dataVolumes = 4;
+}
+
+message InstanceId {
+  string id = 1;
+}
+
+message InstanceGrpc {
+  string id = 1;
+  string name = 2;
+  string systemVolume = 3;
+  string instanceType = 4;
+  InstanceStateGrpc state = 5;
+  repeated string dataVolumes = 6;
+}
+
+enum InstanceStateGrpc {
+     STOPPED     = 0;
+     STOPPING    = 1;
+
+     STARTED     = 2;
+     STARTING    = 3; 
+
+     TERMINATE   = 4;
+     TERMINATING = 5;
+
+     PENDING     = 6;
+}

@@ -1,0 +1,90 @@
+version: '3.1'
+
+services:
+
+# RabbitMq -----------------------------------------------------
+  rabbitmq:
+    ports:
+      - 5672:5672
+      - 4369:4369
+      - 5671:5671
+      - 25672:25672
+      - 15672:15672
+
+# Proxy ------------------------------------------------------
+
+  envoy:   
+    ports:
+      - 8705:80
+      - 8706:8001   
+  
+# Databases ------------------------------------------------------
+
+  mssqlserver:   
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: "InCloudP@66w0rd2z"
+    ports:
+      - 8711:1433
+    volumes:
+      - /opt/incloud/db/mssqlserver/data:/var/opt/mssql/data
+      - /opt/incloud/db/mssqlserver/log:/var/opt/mssql/log
+      - /opt/incloud/db/mssqlserver/secrets:/var/opt/mssql/secrets  
+ 
+  redis:   
+    volumes:
+      - /opt/incloud/db/redis/data:/data
+    ports:
+      - 8712:6379
+
+# identity ------------------------------------------------------
+
+  identity-api:   
+    links:
+      - mssqlserver:mssqlserver
+    environment:
+      - ASPNETCORE_URLS=http://*:5000;https://*:5001
+      - "ConnectionStrings__IdentityDbContext='Server=mssqlserver;Database=incloudidentityservice;User id=sa;Password=InCloudP@66w0rd2z;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=false'"
+    ports:
+      - 8713:5000
+      - 8714:5001
+
+# Services ------------------------------------------------------
+
+  std-gateway:   
+    links:
+      - envoy:envoy
+      - rabbitmq:rabbitmq
+    environment:
+      - "ASPNETCORE_URLS=http://*:5000;https://*:5001"
+      - "urls__identity=envoy/identity:80"
+      - "urls__volumes=envoy/volumes:80"
+      - "urls__instances=envoy/instances:80"
+    ports:
+      - 8717:5000
+      - 8718:5001   
+
+  volumes-api:   
+    links:
+      - redis:redis
+      - rabbitmq:rabbitmq
+    environment:
+      - ASPNETCORE_URLS=http://*:5000;https://*:5001
+      - urls__identity=envoy/identity 
+      - Redis__Host=redis
+      - Redis__Port=6379
+    ports:
+      - 8715:5000
+      - 8716:5001
+
+  instances-api:
+    links:
+      - mssqlserver:mssqlserver
+      - rabbitmq:rabbitmq
+    environment:
+      - ASPNETCORE_URLS=http://*:5000;https://*:5001
+      - urls__identity=envoy/identity 
+      - "ConnectionStrings__InstancesDbContext='Server=mssqlserver;Database=incloudidentityservice;User id=sa;Password=InCloudP@66w0rd2z;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=false'"
+    ports:
+      - 8720:5000
+      - 8721:5001

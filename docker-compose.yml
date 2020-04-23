@@ -1,0 +1,79 @@
+version: '3.1'
+
+services:
+
+# RabbitMq -----------------------------------------------------
+  rabbitmq: 
+    image: rabbitmq:3-management
+    restart: always
+
+# ReverseProxy ------------------------------------------------------
+
+  envoy:
+    build: ./EnvoyProxy/
+    restart: always   
+    networks:
+       - incloudnetwork
+  
+# Databases ------------------------------------------------------
+
+  mssqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-16.04
+    restart: always   
+    networks:
+        - incloudnetwork
+ 
+  redis:
+    build: ./Redis/
+    restart: always   
+
+# identity ------------------------------------------------------
+
+  identity-api:
+    build: ./Services/Identity/Identity.API
+    restart: always
+    depends_on:
+        - mssqlserver
+    networks:
+        - incloudnetwork
+
+# Services ------------------------------------------------------
+
+  std-gateway:   
+    build:
+      context: .
+      dockerfile: ./ApiGateways/Standart/StandartGateway/Dockerfile
+    restart: always
+    networks:
+      - incloudnetwork
+    depends_on:
+        - envoy
+        - rabbitmq
+    networks:
+        - incloudnetwork
+
+  volumes-api:
+    build:
+      context: ./Services/
+      dockerfile: ./Disks/Disks.gRPC.Service/Dockerfile
+    restart: always
+    depends_on:
+        - redis
+        - rabbitmq
+    networks:
+        - incloudnetwork
+
+  instances-api:
+    build:
+      context: ./Services/
+      dockerfile: ./Instances/Instances.API/Dockerfile
+    restart: always
+    depends_on:
+        - mssqlserver
+        - rabbitmq
+    networks:
+        - incloudnetwork
+
+networks:
+   incloudnetwork:
+       driver: bridge

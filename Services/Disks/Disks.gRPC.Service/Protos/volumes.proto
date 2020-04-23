@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option csharp_namespace = "Disks.gRPC.Service";
+
+package volume;
+
+service Volume {
+
+  rpc Create (CreateVolumeRequest) returns (VolumeReply);
+  rpc List (Empty) returns (stream VolumeReply);
+  rpc Get (GetVolume) returns (VolumeReply);
+ }
+
+message CreateVolumeRequest {
+  string name = 1;
+  int32 sizeGb = 2;
+  string osType = 3;
+  repeated string mountPints = 4;
+}
+
+
+message VolumeReply {
+  string id = 1;
+  string name = 2;
+  int32 sizeGb = 3;
+  repeated string mountPoints = 4;
+}
+
+message GetVolume {
+    string id = 1;
+}
+
+message Empty {
+
+}

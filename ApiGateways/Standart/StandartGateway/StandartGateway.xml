@@ -1,0 +1,365 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>StandartGateway</name>
+    </assembly>
+    <members>
+        <member name="T:StandartGateway.VolumeConfigurationBindModel">
+            <summary>
+            Configuration for creating the volume
+            </summary>
+        </member>
+        <member name="P:StandartGateway.VolumeConfigurationBindModel.Name">
+            <summary>
+            The volume name
+            </summary>
+        </member>
+        <member name="P:StandartGateway.VolumeConfigurationBindModel.SizeGb">
+            <summary>
+            The size of the volume
+            </summary>
+        </member>
+        <member name="P:StandartGateway.VolumeConfigurationBindModel.OsType">
+            <summary>
+            The Os type on the volume
+            </summary>
+        </member>
+        <member name="P:StandartGateway.VolumeConfigurationBindModel.MountPoints">
+            <summary>
+            All mount points on the disk
+            </summary>
+        </member>
+        <member name="T:StandartGateway.BindModels.LaunchInstanceConfiguration">
+            <summary>
+            The configuration for a new instance
+            </summary>
+        </member>
+        <member name="P:StandartGateway.BindModels.LaunchInstanceConfiguration.Name">
+            <summary>
+            Instance name
+            </summary>
+        </member>
+        <member name="P:StandartGateway.BindModels.LaunchInstanceConfiguration.InstanceType">
+            <summary>
+            Instance type
+            </summary>
+        </member>
+        <member name="P:StandartGateway.BindModels.LaunchInstanceConfiguration.SystemVolumeId">
+            <summary>
+            System volume
+            </summary>
+        </member>
+        <member name="P:StandartGateway.BindModels.LaunchInstanceConfiguration.DataVolumeIds">
+            <summary>
+            List of data volumes
+            </summary>        
+        </member>
+        <member name="M:StandartGateway.BindModels.LaunchInstanceConfiguration.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="T:StandartGateway.Controllers.InstancesController">
+            <summary>
+            The controller for instances managment
+            </summary>
+        </member>
+        <member name="M:StandartGateway.Controllers.InstancesController.#ctor(StandartGateway.Services.IInstanceDataSource,StandartGateway.Services.IVolumeDataSource,Microsoft.Extensions.Logging.ILogger{StandartGateway.Controllers.InstancesController})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="instanceDataSource"></param>
+            <param name="volumeDataSource"></param>
+            <param name="logger"></param>
+        </member>
+        <member name="M:StandartGateway.Controllers.InstancesController.Launch(StandartGateway.BindModels.LaunchInstanceConfiguration)">
+            <summary>
+            Launch a new instance
+            </summary>
+            <param name="instanceConfiguration">Instance configuration</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Controllers.InstancesController.Start(System.String)">
+            <summary>
+            Start the instance
+            </summary>
+            <param name="instanceId">Instance Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Controllers.InstancesController.Stop(System.String)">
+            <summary>
+            Stop the instance
+            </summary>
+            <param name="instanceId">Instance Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Controllers.InstancesController.Terminate(System.String)">
+            <summary>
+            Terminate the instance
+            </summary>
+            <param name="instanceId">Instance Id</param>
+            <returns></returns>
+        </member>
+        <member name="T:StandartGateway.Controllers.VolumesController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:StandartGateway.Controllers.VolumesController.logger">
+            <summary>
+            Custom logger
+            </summary>
+        </member>
+        <member name="F:StandartGateway.Controllers.VolumesController.volumeSevice">
+            <summary>
+            Volume services
+            </summary>
+        </member>
+        <member name="M:StandartGateway.Controllers.VolumesController.#ctor(Microsoft.Extensions.Logging.ILogger{StandartGateway.Controllers.VolumesController},StandartGateway.Services.IVolumeDataSource)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="logger">Custom logger</param>
+            <param name="volumeSevice">Volume service</param>
+        </member>
+        <member name="M:StandartGateway.Controllers.VolumesController.Get(System.String)">
+            <summary>
+            Searchi a volume by Id
+            </summary>
+            <param name="volumeId">Volume id (vol-xxxxxxx)</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Controllers.VolumesController.List">
+            <summary>
+            Obtain the awailable list of volumes for currents user
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Controllers.VolumesController.Create(StandartGateway.VolumeConfigurationBindModel)">
+            <summary>
+            Create a volume by provided configuration
+            </summary>
+            <param name="configuration">The configuration for a new volume</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.IInstanceDataSource.LaunchAsync(StandartGateway.BindModels.LaunchInstanceConfiguration)">
+            <summary>
+            Launch a new instance by the provided confiduration
+            </summary>
+            <param name="configuration">Configurations</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.IInstanceDataSource.StartAsync(System.String)">
+            <summary>
+            Start the instance
+            </summary>
+            <param name="instanceId">The instance id</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.IInstanceDataSource.StopAsync(System.String)">
+            <summary>
+            Stop the instance
+            </summary>
+            <param name="instanceId">The instance id</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.IInstanceDataSource.TerminateAsync(System.String)">
+            <summary>
+            Terminate the instance
+            </summary>
+            <param name="instanceId">Instance id</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.InstancesService.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Logging.ILogger{StandartGateway.Services.InstancesService},Microsoft.Extensions.Options.IOptions{StandartGateway.Other.UrlsConfig},StandartGateway.Services.GrpcCallerService)">
+            <summary>
+            Constructors
+            </summary>
+            <param name="httpClient"></param>
+            <param name="logger"></param>
+            <param name="config"></param>
+            <param name="grpcCallerService"></param>
+        </member>
+        <member name="M:StandartGateway.Services.InstancesService.LaunchAsync(StandartGateway.BindModels.LaunchInstanceConfiguration)">
+            <summary>
+            Launch a new instance by the provided confiduration
+            </summary>
+            <param name="configuration">Configurations</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.InstancesService.StartAsync(System.String)">
+            <summary>
+            Start the instance
+            </summary>
+            <param name="instanceId">The instance id</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.InstancesService.StopAsync(System.String)">
+            <summary>
+            Stop the instance
+            </summary>
+            <param name="instanceId">The instance id</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.InstancesService.TerminateAsync(System.String)">
+            <summary>
+            Terminate the instance
+            </summary>
+            <param name="instanceId">Instance id</param>
+            <returns></returns>
+        </member>
+        <member name="T:StandartGateway.Services.VolumeService">
+            <summary>
+            Volume service
+            </summary>
+        </member>
+        <member name="M:StandartGateway.Services.VolumeService.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Logging.ILogger{StandartGateway.Services.VolumeService},Microsoft.Extensions.Options.IOptions{StandartGateway.Other.UrlsConfig},StandartGateway.Services.GrpcCallerService)">
+            <summary>
+            Constructors
+            </summary>
+            <param name="httpClient"></param>
+            <param name="logger"></param>
+            <param name="config"></param>
+            <param name="grpcCallerService"></param>
+        </member>
+        <member name="M:StandartGateway.Services.VolumeService.GetVolume(System.String)">
+            <summary>
+            Obtains the volume by Id
+            </summary>
+            <param name="volumeId">Volume id</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.VolumeService.CreateVolume(StandartGateway.VolumeConfigurationBindModel)">
+            <summary>
+            Create a volume from the bind model
+            </summary>
+            <param name="bindModel">Bind volume with volume's properties</param>
+            <returns></returns>
+        </member>
+        <member name="M:StandartGateway.Services.VolumeService.Volumes">
+            <summary>
+            Obtain all volumes for user 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Disks.gRPC.Service.VolumesReflection">
+            <summary>Holder for reflection information generated from volumes.proto</summary>
+        </member>
+        <member name="P:Disks.gRPC.Service.VolumesReflection.Descriptor">
+            <summary>File descriptor for volumes.proto</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.CreateVolumeRequest.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.CreateVolumeRequest.SizeGbFieldNumber">
+            <summary>Field number for the "sizeGb" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.CreateVolumeRequest.OsTypeFieldNumber">
+            <summary>Field number for the "osType" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.CreateVolumeRequest.MountPintsFieldNumber">
+            <summary>Field number for the "mountPints" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.VolumeReply.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.VolumeReply.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.VolumeReply.SizeGbFieldNumber">
+            <summary>Field number for the "sizeGb" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.VolumeReply.MountPointsFieldNumber">
+            <summary>Field number for the "mountPoints" field.</summary>
+        </member>
+        <member name="F:Disks.gRPC.Service.GetVolume.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="P:Disks.gRPC.Service.Volume.Descriptor">
+            <summary>Service descriptor</summary>
+        </member>
+        <member name="T:Disks.gRPC.Service.Volume.VolumeClient">
+            <summary>Client for Volume</summary>
+        </member>
+        <member name="M:Disks.gRPC.Service.Volume.VolumeClient.#ctor(Grpc.Core.ChannelBase)">
+            <summary>Creates a new client for Volume</summary>
+            <param name="channel">The channel to use to make remote calls.</param>
+        </member>
+        <member name="M:Disks.gRPC.Service.Volume.VolumeClient.#ctor(Grpc.Core.CallInvoker)">
+            <summary>Creates a new client for Volume that uses a custom <c>CallInvoker</c>.</summary>
+            <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+        </member>
+        <member name="M:Disks.gRPC.Service.Volume.VolumeClient.#ctor">
+            <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+        </member>
+        <member name="M:Disks.gRPC.Service.Volume.VolumeClient.#ctor(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Protected constructor to allow creation of configured clients.</summary>
+            <param name="configuration">The client configuration.</param>
+        </member>
+        <member name="M:Disks.gRPC.Service.Volume.VolumeClient.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+        </member>
+        <member name="T:Instances.API.InstancesReflection">
+            <summary>Holder for reflection information generated from instances.proto</summary>
+        </member>
+        <member name="P:Instances.API.InstancesReflection.Descriptor">
+            <summary>File descriptor for instances.proto</summary>
+        </member>
+        <member name="F:Instances.API.LaunchInstanceRequest.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:Instances.API.LaunchInstanceRequest.InstanceTypeFieldNumber">
+            <summary>Field number for the "instanceType" field.</summary>
+        </member>
+        <member name="F:Instances.API.LaunchInstanceRequest.SystemVolumeFieldNumber">
+            <summary>Field number for the "systemVolume" field.</summary>
+        </member>
+        <member name="F:Instances.API.LaunchInstanceRequest.DataVolumesFieldNumber">
+            <summary>Field number for the "dataVolumes" field.</summary>
+        </member>
+        <member name="F:Instances.API.InstanceId.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:Instances.API.InstanceGrpc.IdFieldNumber">
+            <summary>Field number for the "id" field.</summary>
+        </member>
+        <member name="F:Instances.API.InstanceGrpc.NameFieldNumber">
+            <summary>Field number for the "name" field.</summary>
+        </member>
+        <member name="F:Instances.API.InstanceGrpc.SystemVolumeFieldNumber">
+            <summary>Field number for the "systemVolume" field.</summary>
+        </member>
+        <member name="F:Instances.API.InstanceGrpc.InstanceTypeFieldNumber">
+            <summary>Field number for the "instanceType" field.</summary>
+        </member>
+        <member name="F:Instances.API.InstanceGrpc.StateFieldNumber">
+            <summary>Field number for the "state" field.</summary>
+        </member>
+        <member name="F:Instances.API.InstanceGrpc.DataVolumesFieldNumber">
+            <summary>Field number for the "dataVolumes" field.</summary>
+        </member>
+        <member name="P:Instances.API.Instances.Descriptor">
+            <summary>Service descriptor</summary>
+        </member>
+        <member name="T:Instances.API.Instances.InstancesClient">
+            <summary>Client for Instances</summary>
+        </member>
+        <member name="M:Instances.API.Instances.InstancesClient.#ctor(Grpc.Core.ChannelBase)">
+            <summary>Creates a new client for Instances</summary>
+            <param name="channel">The channel to use to make remote calls.</param>
+        </member>
+        <member name="M:Instances.API.Instances.InstancesClient.#ctor(Grpc.Core.CallInvoker)">
+            <summary>Creates a new client for Instances that uses a custom <c>CallInvoker</c>.</summary>
+            <param name="callInvoker">The callInvoker to use to make remote calls.</param>
+        </member>
+        <member name="M:Instances.API.Instances.InstancesClient.#ctor">
+            <summary>Protected parameterless constructor to allow creation of test doubles.</summary>
+        </member>
+        <member name="M:Instances.API.Instances.InstancesClient.#ctor(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Protected constructor to allow creation of configured clients.</summary>
+            <param name="configuration">The client configuration.</param>
+        </member>
+        <member name="M:Instances.API.Instances.InstancesClient.NewInstance(Grpc.Core.ClientBase.ClientBaseConfiguration)">
+            <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
+        </member>
+    </members>
+</doc>
