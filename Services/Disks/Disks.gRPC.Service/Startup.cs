@@ -44,7 +44,7 @@ namespace Disks.gRPC.Service
                 app.UseDeveloperExceptionPage();
             }
             
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
