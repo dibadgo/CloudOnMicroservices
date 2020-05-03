@@ -20,7 +20,7 @@ namespace Disks.gRPC.Service.Repos
         /// <summary>
         /// The service which will provide a connection to the service
         /// </summary>
-        private readonly RedisService redisService;
+        private readonly IRedisConnectionService redisService;
 
         /// <summary>
         /// Custom logger
@@ -32,7 +32,7 @@ namespace Disks.gRPC.Service.Repos
         /// </summary>
         /// <param name="redisService">Redis connection provider</param>
         /// <param name="logger">Logger</param>
-        public VolumesRepository(RedisService redisService, ILogger<VolumesRepository> logger)
+        public VolumesRepository(IRedisConnectionService redisService, ILogger<VolumesRepository> logger)
         {
             this.redisService = redisService;
             this.logger = logger;
@@ -54,7 +54,7 @@ namespace Disks.gRPC.Service.Repos
 
             logger.LogInformation($"Created the VolumeModel with Id {volumeId}");
 
-            using ConnectionMultiplexer redis = redisService.Connect();
+            using IConnectionMultiplexer redis = redisService.Connect();
             IDatabase db = redis.GetDatabase();
 
             logger.LogInformation($"Connected to the Redis servier");
@@ -87,12 +87,14 @@ namespace Disks.gRPC.Service.Repos
         {
             logger.LogInformation($"Searching the volume with id {volumeId}");
             logger.LogDebug($"Try to connect to the Redis");
-            using ConnectionMultiplexer redis = redisService.Connect();
+
+            using IConnectionMultiplexer redis = redisService.Connect();
             var db = redis.GetDatabase();
+
             logger.LogDebug($"Connected to the Redis");
 
             string redisKey = GetVolumeKey(userId, volumeId);
-            if (db.KeyExists(redisKey) == false)
+            if (db.KeyExists(redisKey, CommandFlags.None) == false)
             {
                 logger.LogError($"Cannot find a volume with id {redisKey}");
                 throw new VolumeException($"Cannot find a volume with id {redisKey}");
@@ -103,7 +105,7 @@ namespace Disks.gRPC.Service.Repos
             VolumeModel volumeModel = new VolumeModel();
             foreach (PropertyInfo property in volumeModel.GetType().GetProperties())
             {
-                var value = await db.HashGetAsync(redisKey, property.Name);
+                RedisValue value = await db.HashGetAsync(redisKey, property.Name);
                 property.SetValue(volumeModel, Convert.ChangeType(value, property.PropertyType));
             }
 
@@ -118,16 +120,16 @@ namespace Disks.gRPC.Service.Repos
         /// <returns></returns>
         public async Task<IEnumerable<VolumeReply>> List(string userId)
         {
-            using ConnectionMultiplexer redis = redisService.Connect();
-            var db = redis.GetDatabase();
+            using IConnectionMultiplexer redisConnection = redisService.Connect();
+            var db = redisConnection.GetDatabase();
 
             logger.LogDebug("Connected to Redis");
 
             string redisKey = GetVolumeKey(userId);
             logger.LogDebug($"Searching by key pattern: {redisKey}");
 
-            EndPoint endPoint = redis.GetEndPoints().First() ?? throw new VolumeException($"Cannot find an endpoint");
-            RedisKey[] keys = redis.GetServer(endPoint).Keys(pattern: redisKey).ToArray();
+            EndPoint endPoint = redisConnection.GetEndPoints().First() ?? throw new VolumeException($"Cannot find the endpoint");
+            RedisKey[] keys = redisConnection.GetServer(endPoint).Keys(pattern: redisKey).ToArray();
             logger.LogDebug($"Found {keys.Length} keys");
             
             List<VolumeModel> volumes = new List<VolumeModel>();
