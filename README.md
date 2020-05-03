@@ -161,7 +161,7 @@ There is a good [resource](https://dzone.com/articles/why-proxies-are-important-
     | Module                 | Coverage | isDone? |  
     |------------------------|----------|---------|
     | Identity.Api           |     0%   |         |
-    | Disks.gRPC.Service     |     0%   |         |
+    | Disks.gRPC.Service     |     75%   |         |
     | Instances.gRPC.Service |     0%   |         |
     | StdGateway             |     0%   |         |
 
