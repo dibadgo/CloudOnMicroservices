@@ -14,12 +14,12 @@ namespace CommonLib
         
         public static string GenInstanceId()
         {
-            return GenerateId(VOLUME_PREFIX);
+            return GenerateId(INSTANCE_PREFIX);
         }
 
         public static string GenVolumeId()
         {
-            return GenerateId(INSTANCE_PREFIX);
+            return GenerateId(VOLUME_PREFIX);
         }
 
         private static string GenerateId(string prefix)

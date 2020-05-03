@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Disks.gRPC.Service
 {
-    public class RedisService
+    public class RedisService : IRedisConnectionService
     {
         private readonly string _redisHost;
         private readonly int _redisPort;
@@ -22,17 +22,17 @@ namespace Disks.gRPC.Service
             this.logger = logger;
         }
 
-        public ConnectionMultiplexer Connect()
+        public IConnectionMultiplexer Connect()
         {
             try
             {
-                var configString = $"{_redisHost}:{_redisPort},connectRetry=5";
+                string configString = $"{_redisHost}:{_redisPort},connectRetry=5";
                 logger.LogInformation($"Redis Host {configString}");
                 return ConnectionMultiplexer.Connect(configString);
             }
             catch (RedisConnectionException err)
             {
-                //logger.LogError(err.ToString());
+                logger.LogError(err.ToString());
                 throw err;
             }
         }
