@@ -13,7 +13,7 @@ namespace StandartGateway.Controllers
     /// <summary>
     /// The controller for instances managment
     /// </summary>
-    [Route("api/[controller]")]
+    [Route("instances")]
     [ApiController]
     public class InstancesController : ControllerBase
     {
@@ -41,7 +41,7 @@ namespace StandartGateway.Controllers
         /// </summary>
         /// <param name="instanceConfiguration">Instance configuration</param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> Launch([FromBody] LaunchInstanceConfiguration instanceConfiguration)
         {
 
@@ -66,8 +66,8 @@ namespace StandartGateway.Controllers
         /// </summary>
         /// <param name="instanceId">Instance Id</param>
         /// <returns></returns>
-        [HttpGet]
-        [Route("start/{instanceId}")]
+        [HttpPatch]
+        [Route("{instanceId}/start")]
         public async Task<IActionResult> Start(string instanceId)
         {
             var resp = await instanceDataSource.StartAsync(instanceId);
@@ -80,8 +80,8 @@ namespace StandartGateway.Controllers
         /// </summary>
         /// <param name="instanceId">Instance Id</param>
         /// <returns></returns>
-        [HttpGet]
-        [Route("stop/{instanceId}")]
+        [HttpPatch]
+        [Route("{instanceId}/stop")]
         public async Task<IActionResult> Stop(string instanceId)
         {
             var resp = await instanceDataSource.StopAsync(instanceId);
@@ -94,8 +94,8 @@ namespace StandartGateway.Controllers
         /// </summary>
         /// <param name="instanceId">Instance Id</param>
         /// <returns></returns>
-        [HttpGet]
-        [Route("terminate/{instanceId}")]
+        [HttpPatch]
+        [Route("{instanceId}/terminate")]
         public async Task<IActionResult> Terminate(string instanceId)
         {
             var resp = await instanceDataSource.TerminateAsync(instanceId);

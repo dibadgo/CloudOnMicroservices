@@ -61,7 +61,7 @@ The user should use the HTTP(s) protocol to make a request to the API Gateway.
 I do not want to focus on the documentation. All documentation is generated automatically by Swagger.
 After deploy you can try to follow by link https://std-gateway/swagger and enjoy the documentation.
 
-![Swagger](https://drive.google.com/uc?id=1sI6JfrLjsunxgJtNDvrw2d9MbdKJbDgg)
+![Swagger](https://drive.google.com/uc?id=1RxRDH1jWsqJLlYfKMXANn1l9wfKr5cdi)
 
 ## Authentication
 
