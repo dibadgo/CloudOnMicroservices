@@ -17,7 +17,7 @@ namespace StandartGateway.Controllers
     /// </summary>
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("volumes")]
     public class VolumesController : ControllerBase
     {
         /// <summary>
@@ -40,12 +40,12 @@ namespace StandartGateway.Controllers
         }
 
         /// <summary>
-        /// Searchi a volume by Id
+        /// Get a volume by Id
         /// </summary>
         /// <param name="volumeId">Volume id (vol-xxxxxxx)</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("/{volumeId}")]
+        [Route("{volumeId}")]
         public async Task<IActionResult> Get(string volumeId)
         {
             var resp = await volumeSevice.GetVolume(volumeId);
@@ -54,7 +54,7 @@ namespace StandartGateway.Controllers
         }
 
         /// <summary>
-        /// Obtain the awailable list of volumes for currents user
+        /// Get an available list of volumes for currents user
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -70,7 +70,7 @@ namespace StandartGateway.Controllers
         /// </summary>
         /// <param name="configuration">The configuration for a new volume</param>
         /// <returns></returns>
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> Create([FromBody] VolumeConfigurationBindModel configuration)
         {
             var resp = await volumeSevice.CreateVolume(configuration);
